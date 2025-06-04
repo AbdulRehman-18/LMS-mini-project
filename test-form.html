@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        form div { margin: 10px 0; }
+        input, select, button { padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Member Form Test</h1>
+    
+    <div class="test-section">
+        <h2>Direct API Test</h2>
+        <button onclick="testDirectAPI()">Test Direct API Call</button>
+        <div id="apiResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Member Form Submission Test</h2>
+        <form id="testMemberForm">
+            <div>
+                <label>Name: <input type="text" name="name" value="Website Test User" required></label>
+            </div>
+            <div>
+                <label>Email: <input type="email" name="email" value="websitetest@example.com" required></label>
+            </div>
+            <div>
+                <label>Phone: <input type="tel" name="phone" value="(555) 888-9999"></label>
+            </div>
+            <div>
+                <label>Address: <input type="text" name="address" value="123 Website Test St"></label>
+            </div>
+            <button type="submit">Submit Form</button>
+        </form>
+        <div id="formResult"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5001/api';
+
+        async function testDirectAPI() {
+            try {
+                const memberData = {
+                    name: 'Direct API Test User',
+                    email: 'directapi@example.com',
+                    phone: '(555) 999-0000',
+                    address: '456 Direct API Ave',
+                    membership_status: 'Active',
+                    membership_date: new Date().toISOString().split('T')[0]
+                };
+
+                const response = await fetch(`${API_BASE}/members`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(memberData)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('apiResult').innerHTML = 
+                        `<div class="success">✅ Direct API Success! Member ID: ${data.id}</div>`;
+                } else {
+                    document.getElementById('apiResult').innerHTML = 
+                        `<div class="error">❌ API Error: ${data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = 
+                    `<div class="error">❌ Network Error: ${error.message}</div>`;
+            }
+        }
+
+        document.getElementById('testMemberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const memberData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                address: formData.get('address'),
+                membership_status: 'Active',
+                membership_date: new Date().toISOString().split('T')[0]
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/members`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(memberData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('formResult').innerHTML = 
+                        `<div class="success">✅ Form Success! Member ID: ${data.id}</div>`;
+                    e.target.reset();
+                } else {
+                    document.getElementById('formResult').innerHTML = 
+                        `<div class="error">❌ Form Error: ${data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('formResult').innerHTML = 
+                    `<div class="error">❌ Form Network Error: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

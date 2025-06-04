@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Library Management System Test</h1>
+    
+    <div class="test-section">
+        <h2>API Connection Test</h2>
+        <button onclick="testMembers()">Test Members API</button>
+        <button onclick="testBooks()">Test Books API</button>
+        <button onclick="testStats()">Test Stats API</button>
+        <button onclick="testCreateMember()">Test Create Member</button>
+        <div id="apiResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Member Creation Form</h2>
+        <form id="testMemberForm">
+            <div>
+                <label>Name: <input type="text" name="name" value="Test Member" required></label>
+            </div>
+            <div>
+                <label>Email: <input type="email" name="email" value="testmember@example.com" required></label>
+            </div>
+            <div>
+                <label>Phone: <input type="tel" name="phone" value="(555) 123-9999"></label>
+            </div>
+            <div>
+                <label>Address: <input type="text" name="address" value="123 Test Ave"></label>
+            </div>
+            <button type="submit">Create Member</button>
+        </form>
+        <div id="formResults"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5001/api';
+        
+        async function testMembers() {
+            try {
+                const response = await fetch(`${API_BASE}/members`);
+                const data = await response.json();
+                document.getElementById('apiResults').innerHTML = 
+                    `<div class="success">✅ Members API: ${data.length} members found</div>`;
+                console.log('Members:', data);
+            } catch (error) {
+                document.getElementById('apiResults').innerHTML = 
+                    `<div class="error">❌ Members API Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testBooks() {
+            try {
+                const response = await fetch(`${API_BASE}/books`);
+                const data = await response.json();
+                document.getElementById('apiResults').innerHTML += 
+                    `<div class="success">✅ Books API: ${data.length} books found</div>`;
+                console.log('Books:', data);
+            } catch (error) {
+                document.getElementById('apiResults').innerHTML += 
+                    `<div class="error">❌ Books API Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testStats() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const data = await response.json();
+                document.getElementById('apiResults').innerHTML += 
+                    `<div class="success">✅ Stats API: ${data.totalMembers} members, ${data.totalBooks} books</div>`;
+                console.log('Stats:', data);
+            } catch (error) {
+                document.getElementById('apiResults').innerHTML += 
+                    `<div class="error">❌ Stats API Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testCreateMember() {
+            try {
+                const memberData = {
+                    name: "API Test User",
+                    email: "apitest@example.com",
+                    phone: "(555) 999-0001",
+                    address: "999 API Test Street"
+                };
+                
+                const response = await fetch(`${API_BASE}/members`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(memberData)
+                });
+                
+                const data = await response.json();
+                document.getElementById('apiResults').innerHTML += 
+                    `<div class="success">✅ Create Member API: Member created with ID ${data.id}</div>`;
+                console.log('Created member:', data);
+            } catch (error) {
+                document.getElementById('apiResults').innerHTML += 
+                    `<div class="error">❌ Create Member API Error: ${error.message}</div>`;
+            }
+        }
+        
+        document.getElementById('testMemberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const memberData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                address: formData.get('address')
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/members`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(memberData)
+                });
+                
+                const data = await response.json();
+                document.getElementById('formResults').innerHTML = 
+                    `<div class="success">✅ Form submission successful! Member created with ID ${data.id}</div>`;
+                console.log('Form created member:', data);
+            } catch (error) {
+                document.getElementById('formResults').innerHTML = 
+                    `<div class="error">❌ Form submission error: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
