@@ -371,7 +371,7 @@ const startServer = async () => {
     }
 
     server = app.listen(PORT, () => {
-      console.log('🎉 RAHAH  Healthcare Management System Started!');
+      console.log('🎉 AbdulRehman Library Management System Started!');
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log(`🚀 Server: http://localhost:${PORT}`);
       console.log(`🏥 Frontend: http://localhost:${PORT}`);
