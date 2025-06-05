@@ -136,25 +136,6 @@ if (isDev) {
   app.use(morgan('combined'));
 }
 
-// Health check endpoint (no authentication required)
-app.get('/health', async (req, res) => {
-  try {
-    await testConnection();
-    res.status(200).json({
-      status: 'OK',
-      timestamp: new Date().toISOString(),
-      version: process.env.npm_package_version || '1.0.0',
-      environment: process.env.NODE_ENV || 'development'
-    });
-  } catch (error) {
-    res.status(503).json({
-      status: 'ERROR',
-      timestamp: new Date().toISOString(),
-      error: 'Database connection failed'
-    });
-  }
-});
-
 // Serve static files with proper caching headers
 app.use(express.static(path.join(__dirname, '../frontend'), {
   maxAge: isDev ? 0 : '1d', // Cache for 1 day in production
@@ -168,26 +149,6 @@ app.use('/api/members', memberRoutes);
 app.use('/api/loans', loanRoutes);
 app.use('/api/stats', statsRoutes);
 
-// API health check
-app.get('/api/health', async (req, res) => {
-  try {
-    await testConnection();
-    res.status(200).json({
-      status: 'OK',
-      message: 'Library Management API is running',
-      timestamp: new Date().toISOString(),
-      version: '1.0.0',
-      database: 'connected',
-      uptime: process.uptime()
-    });
-  } catch (error) {
-    res.status(503).json({
-      status: 'ERROR',
-      message: 'Database connection failed',
-      timestamp: new Date().toISOString()
-    });
-  }
-});
 
 // API documentation
 app.get('/api/docs', (req, res) => {
@@ -198,29 +159,6 @@ app.get('/api/docs', (req, res) => {
     baseUrl: `${req.protocol}://${req.get('host')}/api`,
     authentication: 'Bearer token (future implementation)',
     endpoints: {
-      patients: {
-        'GET /api/patients': {
-          description: 'Get all patients',
-          parameters: {
-            limit: 'number (default: 50)',
-            offset: 'number (default: 0)',
-            search: 'string (optional)'
-          }
-        },
-        'GET /api/patients/:id': 'Get patient by ID',
-        'POST /api/patients': 'Create new patient',
-        'PUT /api/patients/:id': 'Update patient',
-        'DELETE /api/patients/:id': 'Delete patient',
-        'GET /api/patients/stats': 'Get patient statistics'
-      },
-      doctors: {
-        'GET /api/doctors': 'Get all doctors',
-        'GET /api/doctors/:id': 'Get doctor by ID',
-        'POST /api/doctors': 'Create new doctor',
-        'PUT /api/doctors/:id': 'Update doctor',
-        'DELETE /api/doctors/:id': 'Delete doctor',
-        'GET /api/doctors/stats': 'Get doctor statistics'
-      },
       books: {
         'GET /api/books': 'Get all books',
         'GET /api/books/:id': 'Get book by ID',

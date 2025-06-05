@@ -207,12 +207,6 @@ certificates/
 *_backup
 *_old
 
-# ========================================
-# Application Specific
-# ========================================
-# Medical documents uploads (if implemented)
-uploads/medical-records/
-uploads/patient-documents/
 
 # Report exports
 exports/
@@ -224,10 +218,6 @@ email-cache/
 # Session storage
 sessions/
 
-# Application logs specific to hospital system
-logs/patient-activity.log
-logs/appointment-logs.log
-logs/system-audit.log
 
 # ========================================
 # Development Tools
@@ -260,14 +250,7 @@ logs/system-audit.log
 .cache
 .parcel-cache
 
-# ========================================
-# Security & Compliance
-# ========================================
-# HIPAA compliance - ensure no patient data in repos
-patient-data/
-sensitive-reports/
-audit-logs/
-compliance-reports/
+
 
 # API keys and tokens
 api-keys.txt

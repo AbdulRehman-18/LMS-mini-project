@@ -87,7 +87,7 @@ INSERT INTO books (isbn, title, author, publisher, category, publication_year, c
 ('9780062315007', 'The Alchemist', 'Paulo Coelho', 'HarperOne', 'Fiction', 1988, 3, 3),
 ('9780141187761', 'Brave New World', 'Aldous Huxley', 'Penguin Books', 'Science Fiction', 1932, 2, 2);
 
--- Insert sample book loans (LIBRARY loans, not medical appointments)
+
 INSERT INTO book_loans (book_id, member_id, borrow_date, due_date, return_date, status) VALUES
 (1, 1, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY), NULL, 'Borrowed'),
 (2, 2, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY), NULL, 'Borrowed'),
