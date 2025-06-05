@@ -1,176 +1,142 @@
 
 # 📚 Library Management System
 
-A full-stack Library Management System built with **Node.js**, **Express**, and **MySQL** for the backend, and **HTML/CSS + TailwindCSS** for the frontend. This system allows you to manage books, members, and loan records with ease — ideal for schools, colleges, or personal collections.
+A **full-stack** application designed to simplify and streamline library operations — including **book cataloging**, **member management**, and **loan tracking** — all in one place.
 
-
-## 📂 Project Structure
-
-
-
-.gitignore
-backend/
-├── config/           # Database connection & initialization
-├── models/           # Data models for Book, Member, Loan
-├── routes/           # API routes
-├── server.js         # Entry point for the backend server
-├── package.json      # Backend dependencies
-├── setupDatabase.js  # Script to setup DB
-├── test-db.js        # DB connection tester
-database/
-└── schema.sql        # MySQL schema file
-frontend/
-├── index.html        # Main UI
-├── app.js            # Frontend logic
-├── styles/           # Tailwind CSS setup
-├── package.json      # Frontend dependencies
-test-form.html        # Test UI
-test.html             # Alternative UI
-
+---
 
 ## 🚀 Features
 
-- 📚 **Books Management** – Add, update, delete, and view books  
-- 👥 **Member Management** – Register and manage library members  
-- 🔄 **Book Loans** – Issue and return books with tracking  
-- 📊 **Stats Dashboard** – View system stats  
-- 🎨 **Responsive UI** – Styled using Tailwind CSS  
+* 📚 **Book Management** — Add, update, delete, and view books.
+* 👥 **Member Handling** — Register and track library members.
+* 🔄 **Loan System** — Issue and return books with history tracking.
+* 📊 **Statistics Dashboard** — Real-time stats on books, members, and loans.
+* 🛠️ **RESTful API** — Clean and scalable backend services.
+* 💻 **Responsive Web Interface** — Built with modern web standards.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-| Layer    | Tech                            |
-|----------|---------------------------------|
-| Backend  | Node.js, Express.js             |
-| Database | MySQL                           |
-| Frontend | HTML, JavaScript, Tailwind CSS  |
-| Tools    | Postman (for testing APIs)      |
+**Backend**
 
----
+* [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/)
+* [MySQL](https://www.mysql.com/) / [MariaDB](https://mariadb.org/)
+* [Sequelize ORM](https://sequelize.org/)
 
-## ⚙️ Getting Started
+**Frontend**
 
-### 🔧 Prerequisites
-
-- Node.js & npm  
-- MySQL Server
+* HTML5, CSS3
+* Vanilla JavaScript
+* Tailwind CSS *(Optional enhancement)*
 
 ---
 
-### 📁 Step-by-Step Setup
+## 📦 Installation
 
-#### 1️⃣ Clone the repository
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-````
-
-#### 2️⃣ Set up the MySQL database
-
-Create a new MySQL database (e.g., `library_db`)
-Import the schema:
-
-```bash
-mysql -u root -p library_db < database/schema.sql
+git clone https://github.com/your-username/library-management-system.git
+cd library-management-system
 ```
 
-Or use the Node script:
-
-```bash
-node backend/config/init-db.js
-```
-
-Update `backend/config/database.js` with your MySQL credentials.
-
-#### 3️⃣ Install Backend Dependencies
+### 2️⃣ Backend Setup
 
 ```bash
 cd backend
 npm install
 ```
 
-#### 4️⃣ Start Backend Server
-
-```bash
-node server.js
-```
-
-This starts the backend API server at:
-👉 `http://localhost:3000`
-
-#### 5️⃣ Install Frontend Dependencies
+### 3️⃣ Frontend Setup
 
 ```bash
 cd ../frontend
 npm install
 ```
 
-#### 6️⃣ Build Tailwind CSS (if needed)
+---
+
+## ⚙️ Configuration
+
+### Create Environment File
+
+Inside the `backend/` folder, create a `.env` file:
+
+```env
+DB_HOST=localhost
+DB_NAME=library
+DB_USER=admin
+DB_PASS=secret
+```
+
+### Initialize the Database
 
 ```bash
-npx tailwindcss -i ./styles/tailwind.css -o ./styles/output.css --watch
+node backend/setupDatabase.js
 ```
 
-Or include pre-built styles manually in your `index.html`.
-
-#### 7️⃣ Run the App
-
-Open `frontend/index.html` in your browser
-Or use the **Live Server** extension in VS Code
+> ⚠️ Ensure MySQL service is running and credentials match your setup.
 
 ---
 
-## 📬 API Endpoints
+## 📡 API Endpoints
 
-| Method | Route           | Description           |
-| ------ | --------------- | --------------------- |
-| GET    | `/books`        | Get all books         |
-| POST   | `/books`        | Add a new book        |
-| GET    | `/members`      | Get all members       |
-| POST   | `/members`      | Register a new member |
-| POST   | `/loans/issue`  | Issue a book          |
-| POST   | `/loans/return` | Return a book         |
-| GET    | `/stats`        | View system stats     |
+### 📘 Books (`routes/books.js`)
 
-Use Postman or frontend forms to test these.
+| Method | Endpoint         | Description           |
+| ------ | ---------------- | --------------------- |
+| GET    | `/api/books`     | Fetch all books       |
+| POST   | `/api/books`     | Add a new book        |
+| GET    | `/api/books/:id` | Get details of a book |
 
----
+### 👤 Members (`routes/members.js`)
 
-## 🌟 Screenshots
+| Method | Endpoint       | Description           |
+| ------ | -------------- | --------------------- |
+| GET    | `/api/members` | List all members      |
+| POST   | `/api/members` | Register a new member |
 
-*Add UI screenshots here*
-
----
-
-## 👨‍💻 Author
-
-**Abdul Rehman** – [@AbdulRehman-18](https://github.com/AbdulRehman-18)
+> Additional endpoints can be added for editing and deleting resources.
 
 ---
 
-## 📃 License
+## 🏃 Running the Application
 
-This project is open-source and available under the [MIT License](LICENSE).
+### Start Backend Server
 
----
-
-## 📦 Extras
-
-Would you like to improve this project further?
-✅ Add a `.env.example` file to manage environment variables.
-✅ Add unit tests using Jest or Mocha.
-✅ Create a Dockerfile for containerized deployment.
-
----
-
+```bash
+cd backend
+node server.js
 ```
 
-Would you like me to generate these files now?
+### Start Frontend Server
 
-- ✅ `LICENSE` (MIT)
-- ✅ `.env.example` (for MySQL credentials, port, etc.)
-
-Let me know!
+```bash
+cd ../frontend
+npm start
 ```
+
+Access your app at [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🤝 Contributing
+
+1. **Fork** the repository
+2. Create your **feature branch**:
+   `git checkout -b feature/YourFeature`
+3. **Commit** your changes:
+   `git commit -m "Add: Your feature summary"`
+4. **Push** to the branch:
+   `git push origin feature/YourFeature`
+5. Open a **Pull Request**
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+Feel free to use and adapt it for your needs.
+
+---
