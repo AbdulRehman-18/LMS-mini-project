@@ -25,20 +25,20 @@ async function apiRequest(endpoint, options = {}) {
             'Content-Type': 'application/json'
         }
     };
-    
+
     try {
         console.log(`Making API request to: ${API.baseUrl + endpoint}`);
         showLoading();
         const response = await fetch(API.baseUrl + endpoint, { ...defaults, ...options });
         console.log('API response status:', response.status);
-        
+
         const data = await response.json();
         console.log('API response data:', data);
-        
+
         if (!response.ok) {
             throw new Error(data.message || 'API request failed');
         }
-        
+
         hideLoading();
         return data;
     } catch (error) {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Setup event listeners
         setupEventListeners();
-        
+
         // Load initial data
         await Promise.all([
             loadBooksData(),
@@ -64,14 +64,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Update dashboard with loaded data
         await loadDashboardData();
-        
+
         // Show initial section (dashboard)
         showSection('dashboard');
-        
+
         // Start datetime updates
         updateDateTime();
         setInterval(updateDateTime, 1000);
-        
+
         console.log('Application initialized successfully');
     } catch (error) {
         console.error('Failed to initialize application:', error);
@@ -84,9 +84,9 @@ function showNotification(type, message) {
     const notification = document.getElementById('notification');
     const icon = notification.querySelector('.notification-icon');
     const text = notification.querySelector('.notification-text');
-    
+
     text.textContent = message;
-    
+
     if (type === 'success') {
         notification.classList.add('bg-green-500', 'text-white');
         icon.className = 'fas fa-check-circle text-2xl mr-3';
@@ -100,7 +100,7 @@ function showNotification(type, message) {
         notification.classList.add('bg-blue-500', 'text-white');
         icon.className = 'fas fa-info-circle text-2xl mr-3';
     }
-    
+
     notification.classList.remove('hidden');
     setTimeout(() => {
         notification.classList.add('hidden');
@@ -125,16 +125,16 @@ function hideLoading() {
 const bookAPI = {
     getAll: () => apiRequest('/books'),
     getById: (id) => apiRequest(`/books/${id}`),
-    create: (data) => apiRequest('/books', { 
-        method: 'POST', 
-        body: JSON.stringify(data) 
+    create: (data) => apiRequest('/books', {
+        method: 'POST',
+        body: JSON.stringify(data)
     }),
-    update: (id, data) => apiRequest(`/books/${id}`, { 
-        method: 'PUT', 
-        body: JSON.stringify(data) 
+    update: (id, data) => apiRequest(`/books/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data)
     }),
-    delete: (id) => apiRequest(`/books/${id}`, { 
-        method: 'DELETE' 
+    delete: (id) => apiRequest(`/books/${id}`, {
+        method: 'DELETE'
     }),
     search: (query) => apiRequest(`/books/search?q=${encodeURIComponent(query)}`)
 };
@@ -143,16 +143,16 @@ const bookAPI = {
 const memberAPI = {
     getAll: () => apiRequest('/members'),
     getById: (id) => apiRequest(`/members/${id}`),
-    create: (data) => apiRequest('/members', { 
-        method: 'POST', 
-        body: JSON.stringify(data) 
+    create: (data) => apiRequest('/members', {
+        method: 'POST',
+        body: JSON.stringify(data)
     }),
-    update: (id, data) => apiRequest(`/members/${id}`, { 
-        method: 'PUT', 
-        body: JSON.stringify(data) 
+    update: (id, data) => apiRequest(`/members/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data)
     }),
-    delete: (id) => apiRequest(`/members/${id}`, { 
-        method: 'DELETE' 
+    delete: (id) => apiRequest(`/members/${id}`, {
+        method: 'DELETE'
     }),
     search: (query) => apiRequest(`/members/search?q=${encodeURIComponent(query)}`),
     updateStatus: (id, status) => apiRequest(`/members/${id}/status`, {
@@ -165,22 +165,22 @@ const memberAPI = {
 const loanAPI = {
     getAll: () => apiRequest('/loans'),
     getById: (id) => apiRequest(`/loans/${id}`),
-    create: (data) => apiRequest('/loans', { 
-        method: 'POST', 
-        body: JSON.stringify(data) 
+    create: (data) => apiRequest('/loans', {
+        method: 'POST',
+        body: JSON.stringify(data)
     }),
-    update: (id, data) => apiRequest(`/loans/${id}`, { 
-        method: 'PUT', 
-        body: JSON.stringify(data) 
+    update: (id, data) => apiRequest(`/loans/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data)
     }),
     getOverdue: () => apiRequest('/loans/overdue'),
     getMemberLoans: (memberId) => apiRequest(`/loans/member/${memberId}`),
-    returnBook: (id) => apiRequest(`/loans/${id}/return`, { 
-        method: 'POST' 
+    returnBook: (id) => apiRequest(`/loans/${id}/return`, {
+        method: 'POST'
     }),
-    updateFine: (id, amount) => apiRequest(`/loans/${id}/fine`, { 
-        method: 'PATCH', 
-        body: JSON.stringify({ amount }) 
+    updateFine: (id, amount) => apiRequest(`/loans/${id}/fine`, {
+        method: 'PATCH',
+        body: JSON.stringify({ amount })
     })
 };
 
@@ -188,39 +188,39 @@ const loanAPI = {
 function setupEventListeners() {
     // Navigation event listeners
     setupNavigationListeners();
-    
+
     // Modal event listeners
     setupModalListeners();
-    
+
     // Search event listeners
     setupSearchListeners();
-    
+
     // Quick action listeners
     setupQuickActionListeners();
-    
+
     // Table action listeners will be setup when tables are populated
 }
 
 function setupNavigationListeners() {
     // Desktop navigation
     document.querySelectorAll('.nav-item[data-section]').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const section = this.getAttribute('data-section');
             showSection(section);
             updateActiveNav(this);
         });
     });
-    
+
     // Mobile navigation
     document.querySelectorAll('.nav-item-mobile[data-section]').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const section = this.getAttribute('data-section');
             showSection(section);
             // Close mobile menu
             document.getElementById('mobileMenu').classList.add('hidden');
         });
     });
-    
+
     // Mobile menu toggle
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     if (mobileMenuToggle) {
@@ -231,30 +231,30 @@ function setupNavigationListeners() {
 function setupModalListeners() {
     // Modal open buttons
     document.querySelectorAll('[data-modal]').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const modalId = this.getAttribute('data-modal');
             openModal(modalId);
         });
     });
-    
+
     // Modal close buttons
     document.querySelectorAll('.modal-close').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const modalId = this.getAttribute('data-modal');
             closeModal(modalId);
         });
     });
-    
+
     // Close modal when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target.classList.contains('modal')) {
             const modalId = e.target.id;
             closeModal(modalId);
         }
     });
-    
+
     // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
             const openModals = document.querySelectorAll('.modal:not(.hidden)');
             openModals.forEach(modal => {
@@ -271,30 +271,30 @@ function setupSearchListeners() {
 function setupQuickActionListeners() {
     // Quick action buttons
     document.querySelectorAll('.quick-action[data-modal]').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const modalId = this.getAttribute('data-modal');
             openModal(modalId);
         });
     });
-    
+
     // Library-specific buttons
     const addMemberBtn = document.querySelector('.add-member-btn[data-modal]');
     if (addMemberBtn) {
-        addMemberBtn.addEventListener('click', function() {
+        addMemberBtn.addEventListener('click', function () {
             openModal('memberModal');
         });
     }
-    
+
     const addBookBtn = document.querySelector('.add-book-btn[data-modal]');
     if (addBookBtn) {
-        addBookBtn.addEventListener('click', function() {
+        addBookBtn.addEventListener('click', function () {
             openModal('bookModal');
         });
     }
-    
+
     const addLoanBtn = document.querySelector('.add-loan-btn[data-modal]');
     if (addLoanBtn) {
-        addLoanBtn.addEventListener('click', function() {
+        addLoanBtn.addEventListener('click', function () {
             openModal('loanModal');
         });
     }
@@ -303,19 +303,19 @@ function setupQuickActionListeners() {
 // Date/Time Functions
 function updateDateTime() {
     const now = new Date();
-    const options = { 
-        weekday: 'short', 
-        year: 'numeric', 
-        month: 'short', 
+    const options = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
     };
-    
+
     const dateTimeElement = document.getElementById('currentDateTime');
     const lastUpdatedElement = document.getElementById('lastUpdated');
-    
+
     if (dateTimeElement) {
         dateTimeElement.textContent = now.toLocaleString('en-US', options);
     }
@@ -344,19 +344,19 @@ const showNotification = (title, message, type = 'info') => {
     const icon = document.getElementById('notificationIcon');
     const titleEl = document.getElementById('notificationTitle');
     const messageEl = document.getElementById('notificationMessage');
-    
+
     if (!notification || !icon || !titleEl || !messageEl) {
         console.log(`${type.toUpperCase()}: ${title} - ${message}`);
         return;
     }
-    
+
     // Set content
     titleEl.textContent = title;
     messageEl.textContent = message;
-    
+
     // Reset classes
     notification.className = 'fixed top-4 right-4 p-4 rounded-xl shadow-lg z-50 max-w-sm';
-    
+
     // Set styling based on type
     if (type === 'success') {
         notification.classList.add('bg-green-500', 'text-white');
@@ -371,7 +371,7 @@ const showNotification = (title, message, type = 'info') => {
         notification.classList.add('bg-blue-500', 'text-white');
         icon.className = 'fas fa-info-circle text-2xl mr-3';
     }
-    
+
     notification.classList.remove('hidden');
     setTimeout(() => {
         notification.classList.add('hidden');
@@ -384,21 +384,21 @@ async function loadMembers() {
         console.log('Loading members from API...');
         const response = await fetch(API.baseUrl + '/members');
         console.log('API Response:', response);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         console.log('Members loaded:', data);
-        
+
         if (!Array.isArray(data)) {
             console.warn('Expected array of members but got:', typeof data);
             members = [];
         } else {
             members = data;
         }
-        
+
         return members;
     } catch (error) {
         console.error('Error loading members:', error);
@@ -412,14 +412,14 @@ async function loadBooks() {
         console.log('Loading books from API...');
         const response = await fetch(API.baseUrl + '/books');
         console.log('API Response:', response);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         console.log('Books loaded:', data);
-        
+
         if (!Array.isArray(data)) {
             console.warn('Expected array of books but got:', typeof data);
             books = [];
@@ -429,7 +429,7 @@ async function loadBooks() {
                 available: book.copies_available > 0
             }));
         }
-        
+
         return books;
     } catch (error) {
         console.error('Error loading books:', error);
@@ -443,14 +443,14 @@ async function loadLoans() {
         console.log('Loading loans from API...');
         const response = await fetch(API.baseUrl + '/loans');
         console.log('API Response:', response);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         console.log('Loans loaded:', data);
-        
+
         if (!Array.isArray(data)) {
             console.warn('Expected array of loans but got:', typeof data);
             loans = [];
@@ -461,7 +461,7 @@ async function loadLoans() {
                 loan_date: loan.borrow_date
             }));
         }
-        
+
         return loans;
     } catch (error) {
         console.error('Error loading loans:', error);
@@ -478,16 +478,16 @@ async function updateDashboardStats() {
         console.log('Received stats:', stats);
 
         const elements = {
-            'totalMembers': stats.totalMembers,
-            'newMembersThisWeek': stats.newMembers,
-            'totalBooks': stats.totalBooks,
-            'categories': stats.categories,
-            'activeLoans': stats.activeLoans,
-            'overdueLoans': stats.overdueLoans,
-            'availableBooks': stats.availableBooks,
-            'returnedCount': stats.returnedToday,
-            'borrowedCount': stats.borrowedToday,
-            'overdueCount': stats.overdueTotal
+            'totalMembers': stats.total_members,
+            'newMembersThisWeek': stats.new_members_this_week,
+            'totalBooks': stats.total_books,
+            'categoriesCount': stats.categories_count,
+            'activeLoans': stats.active_loans,
+            'overdueLoans': stats.overdue_loans,
+            'availableBooks': stats.available_books,
+            'returnedCount': stats.returned_count,
+            'borrowedCount': stats.borrowed_count,
+            'overdueCount': stats.overdue_count
         };
 
         // Update all elements, with fallback to 0 for missing values
@@ -545,9 +545,9 @@ function renderMembersTable(members) {
         console.error('Members table body element not found!');
         return;
     }
-    
+
     tableBody.innerHTML = '';
-    
+
     if (!members || members.length === 0) {
         console.log('No members data to display');
         tableBody.innerHTML = `
@@ -557,21 +557,21 @@ function renderMembersTable(members) {
         `;
         return;
     }
-    
+
     members.forEach(member => {
         // Use membership_status from database schema
         const status = member.membership_status || 'Active';
-        const statusClass = status === 'Active' 
-            ? 'bg-green-100 text-green-800' 
-            : status === 'Suspended' 
-                ? 'bg-red-100 text-red-800' 
+        const statusClass = status === 'Active'
+            ? 'bg-green-100 text-green-800'
+            : status === 'Suspended'
+                ? 'bg-red-100 text-red-800'
                 : status === 'Expired'
                     ? 'bg-yellow-100 text-yellow-800'
                     : 'bg-gray-100 text-gray-800';
-                
+
         // Get membership type - handle differences in naming between frontend and backend
-        const membershipType = member.membershipType || member.membership_type || 'Standard';
-                
+        const membershipType = member.membership_type || member.membership_type || 'Standard';
+
         tableBody.innerHTML += `
             <tr data-member-id="${member.id}">
                 <td class="py-3 px-4">${member.id}</td>
@@ -595,18 +595,18 @@ function renderMembersTable(members) {
             </tr>
         `;
     });
-    
+
     // Setup event listeners for the edit and delete buttons
     const editButtons = document.querySelectorAll('[data-action="edit-member"]');
     const deleteButtons = document.querySelectorAll('[data-action="delete-member"]');
-    
+
     editButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const memberId = e.target.closest('[data-member-id]').dataset.memberId;
             openEditMemberModal(memberId);
         });
     });
-    
+
     deleteButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const memberId = e.target.closest('[data-member-id]').dataset.memberId;
@@ -621,10 +621,10 @@ function renderBooksGrid(books) {
         console.error('Books grid element not found!');
         return;
     }
-    
+
     console.log('Rendering books grid with:', books);
     booksGrid.innerHTML = '';
-    
+
     if (!books || books.length === 0) {
         booksGrid.innerHTML = `
             <div class="col-span-full py-8 text-center text-gray-500">
@@ -634,13 +634,13 @@ function renderBooksGrid(books) {
         `;
         return;
     }
-    
+
     books.forEach(book => {
         // Determine status class
         const available = book.copies_available > 0;
         const statusClass = available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
         const statusText = available ? 'Available' : 'Borrowed';
-        
+
         booksGrid.innerHTML += `
             <div class="book-card" data-book-id="${book.id}">
                 <div class="bg-gradient-to-br from-gray-100 to-blue-50 p-5 rounded-t-xl">
@@ -676,7 +676,7 @@ function renderBooksGrid(books) {
             </div>
         `;
     });
-    
+
     // Setup event listeners for edit and delete buttons
     document.querySelectorAll('[data-action="edit-book"]').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -684,7 +684,7 @@ function renderBooksGrid(books) {
             openEditBookModal(bookId);
         });
     });
-    
+
     document.querySelectorAll('[data-action="delete-book"]').forEach(button => {
         button.addEventListener('click', (e) => {
             const bookId = e.target.closest('[data-book-id]').dataset.bookId;
@@ -699,10 +699,10 @@ function renderLoansTable(loans) {
         console.error('Loans table body element not found!');
         return;
     }
-    
+
     console.log('Rendering loans table with:', loans);
     loansTableBody.innerHTML = '';
-    
+
     if (!loans || loans.length === 0) {
         loansTableBody.innerHTML = `
             <tr>
@@ -711,22 +711,22 @@ function renderLoansTable(loans) {
         `;
         return;
     }
-    
+
     loans.forEach(loan => {
         const now = new Date();
         const dueDate = new Date(loan.due_date);
-        
+
         // Calculate status and class
         let statusClass = 'bg-blue-100 text-blue-800';
         let status = loan.status || 'Borrowed';
-        
+
         if (loan.status === 'Returned') {
             statusClass = 'bg-green-100 text-green-800';
         } else if (dueDate < now) {
             status = 'Overdue';
             statusClass = 'bg-red-100 text-red-800';
         }
-        
+
         loansTableBody.innerHTML += `
             <tr data-loan-id="${loan.id}">
                 <td class="py-3 px-4">${loan.id}</td>
@@ -753,7 +753,7 @@ function renderLoansTable(loans) {
             </tr>
         `;
     });
-    
+
     // Add event listeners for return buttons
     document.querySelectorAll('[data-action="return-loan"]').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -768,11 +768,11 @@ function renderLoansTable(loans) {
 async function handleBookSubmit(event) {
     event.preventDefault();
     const form = event.target;
-    
+
     try {
         console.log('Book form submitted');
         showLoading();
-        
+
         const bookData = {
             title: form.querySelector('[name="title"]').value,
             author: form.querySelector('[name="author"]').value,
@@ -783,9 +783,9 @@ async function handleBookSubmit(event) {
             publisher: form.querySelector('[name="publisher"]').value,
             publication_year: parseInt(form.querySelector('[name="publication_year"]').value, 10)
         };
-        
+
         console.log('Book data:', bookData);
-        
+
         const bookId = form.dataset.bookId;
         if (bookId) {
             // Update existing book
@@ -796,20 +796,20 @@ async function handleBookSubmit(event) {
             await bookAPI.create(bookData);
             showNotification('success', 'Book added successfully');
         }
-        
+
         form.reset();
         closeModal('bookModal');
-        
+
         // Reload books data and update UI
         books = await loadBooks();
         renderBooksGrid(books);
-        
+
         // Update dashboard stats
         await loadDashboardData();
-        
+
         // Update loan dropdown since book availability changed
         populateDropdowns();
-        
+
         hideLoading();
     } catch (error) {
         hideLoading();
@@ -824,10 +824,10 @@ function openEditBookModal(bookId) {
         showNotification('error', 'Book not found');
         return;
     }
-    
+
     const form = document.getElementById('bookForm');
     form.dataset.bookId = bookId;
-    
+
     // Fill form fields
     form.querySelector('#bookTitle').value = book.title;
     form.querySelector('#bookAuthor').value = book.author;
@@ -836,10 +836,10 @@ function openEditBookModal(bookId) {
     form.querySelector('#bookPublisher').value = book.publisher || '';
     form.querySelector('#bookYear').value = book.publishYear || '';
     form.querySelector('#bookCopies').value = book.copiesAvailable || 1;
-    
+
     // Change button text to indicate editing
     form.querySelector('button[type="submit"]').textContent = 'Update Book';
-    
+
     openModal('bookModal');
 }
 
@@ -847,7 +847,7 @@ async function handleBookDelete(bookId) {
     if (!confirm('Are you sure you want to delete this book?')) {
         return;
     }
-    
+
     try {
         await bookAPI.delete(bookId);
         showNotification('success', 'Book deleted successfully');
@@ -861,16 +861,16 @@ async function handleBookDelete(bookId) {
 async function handleBookSearch(event) {
     const searchInput = event.target;
     const query = searchInput.value.trim();
-    
+
     if (query.length === 0) {
         await loadBooksData(); // Reset to show all books
         return;
     }
-    
+
     if (query.length < 2) {
         return; // Wait for more characters
     }
-    
+
     try {
         const searchResults = await bookAPI.search(query);
         renderBooksGrid(searchResults);
@@ -907,7 +907,7 @@ async function handleMemberSubmit(event) {
     try {
         console.log('Member form submitted');
         showLoading();
-        
+
         const memberData = {
             name: form.querySelector('[name="name"]').value,
             email: form.querySelector('[name="email"]').value,
@@ -917,9 +917,9 @@ async function handleMemberSubmit(event) {
             membershipType: form.querySelector('[name="membershipType"]').value, // Keeping for frontend reference
             membership_date: new Date().toISOString().split('T')[0]
         };
-        
+
         console.log('Member data:', memberData);
-        
+
         const memberId = form.dataset.memberId;
         if (memberId) {
             // When updating, ensure we preserve the existing membership status if it exists
@@ -933,21 +933,21 @@ async function handleMemberSubmit(event) {
             await memberAPI.create(memberData);
             showNotification('success', 'Member added successfully');
         }
-        
+
         form.reset();
         delete form.dataset.memberId;
         closeModal('memberModal');
-        
+
         // Reload members data and update UI
         members = await loadMembers();
         renderMembersTable(members);
-        
+
         // Update dashboard stats
         await loadDashboardData();
-        
+
         // Populate dropdowns in case this member is used in loans
         populateDropdowns();
-        
+
         hideLoading();
     } catch (error) {
         hideLoading();
@@ -968,20 +968,20 @@ function openEditMemberModal(memberId) {
     form.querySelector('[name="email"]').value = member.email;
     form.querySelector('[name="phone"]').value = member.phone || '';
     form.querySelector('[name="address"]').value = member.address || '';
-    
+
     // Set membership type if it exists in the form
     const membershipTypeField = form.querySelector('[name="membershipType"]');
     if (membershipTypeField) {
         // Default to 'Standard' if not specified
         membershipTypeField.value = member.membership_type || member.membershipType || 'Standard';
     }
-    
+
     // Change button text to indicate editing
     const submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) {
         submitBtn.textContent = 'Update Member';
     }
-    
+
     openModal('memberModal');
 }
 
@@ -1045,20 +1045,20 @@ async function handleLoanSubmit(event) {
     try {
         console.log('Loan form submitted');
         showLoading();
-        
+
         // Get today if no date provided
         const today = new Date().toISOString().split('T')[0];
-        
+
         // Calculate due date (14 days from borrow date by default)
         const borrowDate = form.querySelector('[name="borrow_date"]').value || today;
         let dueDate = form.querySelector('[name="due_date"]').value;
-        
+
         if (!dueDate) {
             const dueDateObj = new Date(borrowDate);
             dueDateObj.setDate(dueDateObj.getDate() + 14);
             dueDate = dueDateObj.toISOString().split('T')[0];
         }
-        
+
         const loanData = {
             member_id: parseInt(form.querySelector('[name="member_id"]').value, 10),
             book_id: parseInt(form.querySelector('[name="book_id"]').value, 10),
@@ -1066,7 +1066,7 @@ async function handleLoanSubmit(event) {
             due_date: dueDate,
             status: 'Borrowed'
         };
-        
+
         console.log('Loan data:', loanData);
         // Validate required fields
         if (!loanData.member_id || !loanData.book_id) {
@@ -1074,26 +1074,26 @@ async function handleLoanSubmit(event) {
             showNotification('error', 'Please select both a member and a book');
             return;
         }
-        
+
         await loanAPI.create(loanData);
         showNotification('success', 'Loan issued successfully');
         form.reset();
         closeModal('loanModal');
-        
+
         // Reload loans data and update UI
         loans = await loadLoans();
         renderLoansTable(loans);
-        
+
         // Reload books as availability has changed
         books = await loadBooks();
         renderBooksGrid(books);
-        
+
         // Update dashboard stats
         await loadDashboardData();
-        
+
         // Repopulate dropdowns as book availability changed
         populateDropdowns();
-        
+
         hideLoading();
     } catch (error) {
         hideLoading();
@@ -1106,27 +1106,27 @@ async function handleLoanReturn(loanId) {
     if (!confirm('Are you sure you want to mark this book as returned?')) {
         return;
     }
-    
+
     try {
         showLoading();
-        
+
         await loanAPI.returnBook(loanId);
         showNotification('success', 'Book returned successfully');
-        
+
         // Reload loans data
         loans = await loadLoans();
         renderLoansTable(loans);
-        
+
         // Reload books as availability has changed
         books = await loadBooks();
         renderBooksGrid(books);
-        
+
         // Update dashboard stats
         await loadDashboardData();
-        
+
         // Update loan dropdown since book availability changed
         populateDropdowns();
-        
+
         hideLoading();
     } catch (error) {
         hideLoading();
@@ -1150,48 +1150,48 @@ async function handleLoanFilter() {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         showLoading();
-        
+
         // Setup all event listeners first
         setupEventListeners();
-        
+
         // Update date/time immediately and then every second
         updateDateTime();
         setInterval(updateDateTime, 1000);
-        
+
         // Form submit handlers are set up in setupMemberEventListeners(), setupBookEventListeners(), setupLoanEventListeners()
-        
+
         // Load all data
         members = await loadMembers();
         books = await loadBooks();
         loans = await loadLoans();
-        
+
         // Populate the dropdowns for loans
         populateDropdowns();
-        
+
         // Update dashboard statistics
         await updateDashboardStats();
-        
+
         // Render data in tables
         renderMembersTable(members);
         renderBooksGrid(books);
         renderLoansTable(loans);
-        
+
         // Initialize default section
         showSection('dashboard');
-        
+
         // Setup specific event listeners
         setupMemberEventListeners();
         setupBookEventListeners();
         setupLoanEventListeners();
         setupSearchHandlers();
-        
+
         // Setup auto-refresh for loans (every 5 minutes)
         setInterval(async () => {
             loans = await loadLoans();
             renderLoansTable(loans);
             updateDashboardStats();
         }, 5 * 60 * 1000);
-        
+
         hideLoading();
         showNotification('success', 'Library Management System initialized successfully');
     } catch (error) {
@@ -1211,7 +1211,7 @@ function populateDropdowns() {
             memberDropdown.innerHTML += `<option value="${member.id}">${member.name}</option>`;
         });
     }
-    
+
     // Populate book dropdown for loans
     const bookDropdown = document.getElementById('loanBook');
     if (bookDropdown) {
@@ -1222,7 +1222,7 @@ function populateDropdowns() {
             bookDropdown.innerHTML += `<option value="${book.id}">${book.title} (${book.author})</option>`;
         });
     }
-    
+
     // Populate member filter for loans page
     const memberFilter = document.getElementById('memberFilter');
     if (memberFilter) {
@@ -1238,71 +1238,71 @@ function setupSearchHandlers() {
     // Book search handling
     const bookSearchInput = document.getElementById('bookSearch');
     if (bookSearchInput) {
-        bookSearchInput.addEventListener('input', debounce(function(e) {
+        bookSearchInput.addEventListener('input', debounce(function (e) {
             const searchTerm = e.target.value.trim().toLowerCase();
-            
+
             if (searchTerm.length === 0) {
                 // When search is cleared, show all books
                 renderBooksGrid(books);
                 return;
             }
-            
+
             if (searchTerm.length < 2) return; // Wait for more characters
-            
+
             // Filter books client-side (could be replaced with API call for large datasets)
-            const filteredBooks = books.filter(book => 
+            const filteredBooks = books.filter(book =>
                 book.title.toLowerCase().includes(searchTerm) ||
                 book.author.toLowerCase().includes(searchTerm) ||
                 book.isbn.toLowerCase().includes(searchTerm) ||
                 (book.category && book.category.toLowerCase().includes(searchTerm))
             );
-            
+
             renderBooksGrid(filteredBooks);
         }, 300));
     }
-    
+
     // Member search handling
     const memberSearchInput = document.getElementById('memberSearch');
     if (memberSearchInput) {
-        memberSearchInput.addEventListener('input', debounce(function(e) {
+        memberSearchInput.addEventListener('input', debounce(function (e) {
             const searchTerm = e.target.value.trim().toLowerCase();
-            
+
             if (searchTerm.length === 0) {
                 // When search is cleared, show all members
                 renderMembersTable(members);
                 return;
             }
-            
+
             if (searchTerm.length < 2) return; // Wait for more characters
-            
+
             // Filter members client-side (could be replaced with API call for large datasets)
-            const filteredMembers = members.filter(member => 
+            const filteredMembers = members.filter(member =>
                 member.name.toLowerCase().includes(searchTerm) ||
                 (member.email && member.email.toLowerCase().includes(searchTerm)) ||
                 (member.phone && member.phone.toLowerCase().includes(searchTerm))
             );
-            
+
             renderMembersTable(filteredMembers);
         }, 300));
     }
-    
+
     // Category filter for books
     const categoryFilter = document.getElementById('categoryFilter');
     if (categoryFilter) {
-        categoryFilter.addEventListener('change', function() {
+        categoryFilter.addEventListener('change', function () {
             const category = this.value;
-            
+
             if (!category) {
                 // When filter is cleared, show all books
                 renderBooksGrid(books);
                 return;
             }
-            
+
             // Filter books by category
-            const filteredBooks = books.filter(book => 
+            const filteredBooks = books.filter(book =>
                 book.category === category
             );
-            
+
             renderBooksGrid(filteredBooks);
         });
     }
@@ -1311,7 +1311,7 @@ function setupSearchHandlers() {
 // Debounce utility function to limit function calls
 function debounce(func, wait) {
     let timeout;
-    return function(...args) {
+    return function (...args) {
         const context = this;
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(context, args), wait);
@@ -1328,7 +1328,7 @@ function setupBookEventListeners() {
         booksGrid.addEventListener('click', (e) => {
             const editBtn = e.target.closest('[data-action="edit-book"]');
             const deleteBtn = e.target.closest('[data-action="delete-book"]');
-            
+
             if (editBtn) {
                 const bookId = editBtn.closest('[data-book-id]').dataset.bookId;
                 openEditBookModal(bookId);
@@ -1346,12 +1346,12 @@ function openModal(modalId) {
     if (modal) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden'; // Prevent scrolling while modal is open
-        
+
         // If opening a modal for adding something new (not editing), reset the form
         const form = modal.querySelector('form');
         if (form && !form.dataset.bookId && !form.dataset.memberId && !form.dataset.loanId) {
             form.reset();
-            
+
             // Reset any submit button text to default
             const submitBtn = form.querySelector('button[type="submit"]');
             if (submitBtn) {
@@ -1368,7 +1368,7 @@ function closeModal(modalId) {
     if (modal) {
         modal.classList.add('hidden');
         document.body.style.overflow = ''; // Re-enable scrolling
-        
+
         // Clear any form data-id attributes when closing
         const form = modal.querySelector('form');
         if (form) {
@@ -1418,7 +1418,7 @@ async function loadDashboardData() {
         document.getElementById('overdueCount').textContent = `${overdueLoans} Overdue`;
         document.getElementById('newMembersThisWeek').textContent = newMembersThisWeek;
         document.getElementById('categories').textContent = `${categories} Categories`;
-        
+
         return {
             totalMembers,
             totalBooks,
@@ -1442,12 +1442,12 @@ function showSection(sectionId) {
     document.querySelectorAll('.section').forEach(section => {
         section.classList.add('hidden');
     });
-    
+
     // Show selected section
     const selectedSection = document.getElementById(sectionId);
     if (selectedSection) {
         selectedSection.classList.remove('hidden');
-        
+
         // Update the active nav item
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
@@ -1455,7 +1455,7 @@ function showSection(sectionId) {
                 item.classList.add('active');
             }
         });
-        
+
         // Update mobile nav items
         document.querySelectorAll('.nav-item-mobile').forEach(item => {
             if (item.getAttribute('data-section') === sectionId) {
@@ -1464,10 +1464,10 @@ function showSection(sectionId) {
                 item.classList.remove('bg-white', 'bg-opacity-10');
             }
         });
-        
+
         // Save current section to global state
         currentSection = sectionId;
-        
+
         // Perform section-specific actions
         if (sectionId === 'dashboard') {
             loadDashboardData();

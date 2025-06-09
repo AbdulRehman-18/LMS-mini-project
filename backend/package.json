@@ -1,7 +1,7 @@
 {
-  "name": "hospital-management-backend",
+  "name": "library-management-backend",
   "version": "1.0.0",
-  "description": "Hospital Management System Backend API",
+  "description": "Library Management System Backend API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -33,12 +33,12 @@
     "nodemon": "^3.0.1"
   },
   "keywords": [
-    "hospital",
+    "Library",
     "management",
     "api",
     "express",
     "mysql"
   ],
-  "author": "",
+  "author": "Abdul Rehman",
   "license": "MIT"
 }
