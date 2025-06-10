@@ -110,13 +110,35 @@ router.put('/:id', async (req, res) => {
 // Delete a member
 router.delete('/:id', async (req, res) => {
     try {
-        const success = await Member.delete(req.params.id);
+        const memberId = req.params.id;
+        
+        // Check if member exists
+        const member = await Member.findById(memberId);
+        if (!member) {
+            return res.status(404).json({ message: 'Member not found' });
+        }
+        
+        // Check for active loans before deletion
+        const pool = require('../config/database');
+        const [activeLoans] = await pool.query(
+            'SELECT COUNT(*) as count FROM book_loans WHERE member_id = ? AND status IN (?, ?)',
+            [memberId, 'Borrowed', 'Overdue']
+        );
+        
+        if (activeLoans[0].count > 0) {
+            return res.status(400).json({ 
+                message: `Cannot delete member. Member has ${activeLoans[0].count} active loan(s). Please return all books before deleting the member.` 
+            });
+        }
+        
+        const success = await Member.delete(memberId);
         if (success) {
             res.json({ message: 'Member deleted successfully' });
         } else {
-            res.status(404).json({ message: 'Member not found' });
+            res.status(500).json({ message: 'Failed to delete member' });
         }
     } catch (error) {
+        console.error('Delete member error:', error);
         res.status(500).json({ message: error.message });
     }
 });

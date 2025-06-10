@@ -986,14 +986,42 @@ function openEditMemberModal(memberId) {
 }
 
 async function handleMemberDelete(memberId) {
-    if (!confirm('Are you sure you want to delete this member?')) return;
+    // Find the member to get their name for the confirmation
+    const member = members.find(m => m.id == memberId);
+    const memberName = member ? member.name : 'Unknown Member';
+    
+    if (!confirm(`Are you sure you want to delete member "${memberName}"?\n\nThis action cannot be undone. The member will be permanently removed from the system.\n\nNote: Members with active loans cannot be deleted.`)) {
+        return;
+    }
+    
     try {
+        showLoading();
         await memberAPI.delete(memberId);
-        showNotification('success', 'Member deleted successfully');
+        showNotification('success', `Member "${memberName}" deleted successfully`);
+        
+        // Reload members data and update UI
         await loadMembersData();
         await updateDashboardStats();
+        
+        // Update dropdowns in case this member was used in loans
+        populateDropdowns();
+        
     } catch (error) {
-        showNotification('error', 'Failed to delete member: ' + error.message);
+        console.error('Member deletion error:', error);
+        
+        // Show a more user-friendly error message
+        let errorMessage = 'Failed to delete member';
+        if (error.message.includes('active loan')) {
+            errorMessage = error.message; // Use the specific message from backend
+        } else if (error.message.includes('not found')) {
+            errorMessage = 'Member not found';
+        } else {
+            errorMessage = `Failed to delete member: ${error.message}`;
+        }
+        
+        showNotification('error', errorMessage);
+    } finally {
+        hideLoading();
     }
 }
 

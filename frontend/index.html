@@ -1408,6 +1408,7 @@
 
                         const row = document.createElement('tr');
                         row.className = `fade-in animate-delay-${(index % 2) * 100}`;
+                        row.setAttribute('data-member-id', member.id);
                         row.innerHTML = `
                             <td class="font-semibold text-gray-700">${member.id}</td>
                             <td class="font-medium">${member.name}</td>
@@ -1423,16 +1424,58 @@
                             </td>
                             <td>
                                 <div class="flex space-x-2">
-                                    <button class="text-primary hover:text-blue-700">
+                                    <button class="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition" data-action="edit-member" title="Edit Member">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="text-red-500 hover:text-red-700">
+                                    <button class="px-2 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition" data-action="delete-member" title="Delete Member">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </div>
                             </td>
                         `;
                         membersTableBody.appendChild(row);
+                    });
+
+                    // Add event listeners for member action buttons
+                    document.querySelectorAll('[data-action="edit-member"]').forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const memberId = this.closest('[data-member-id]').getAttribute('data-member-id');
+                            console.log('Edit member:', memberId);
+                            // You can implement edit functionality here
+                            showNotification('Edit functionality will be implemented soon!');
+                        });
+                    });
+
+                    document.querySelectorAll('[data-action="delete-member"]').forEach(button => {
+                        button.addEventListener('click', async function(e) {
+                            e.preventDefault();
+                            const memberId = this.closest('[data-member-id]').getAttribute('data-member-id');
+                            const memberName = this.closest('[data-member-id]').querySelector('td:nth-child(2)').textContent;
+                            
+                            if (confirm(`Are you sure you want to delete member "${memberName}"? This action cannot be undone.`)) {
+                                try {
+                                    showLoading();
+                                    const response = await fetch(`${API_ENDPOINTS.MEMBERS}/${memberId}`, {
+                                        method: 'DELETE'
+                                    });
+
+                                    if (!response.ok) {
+                                        const errorData = await response.json();
+                                        throw new Error(errorData.message || 'Failed to delete member');
+                                    }
+
+                                    showNotification('Member deleted successfully!');
+                                    renderMembers(); // Refresh the member list
+                                    updateDashboardStats(); // Update dashboard statistics
+                                } catch (error) {
+                                    console.error('Error deleting member:', error);
+                                    showNotification(error.message || 'Failed to delete member. Please try again.', false);
+                                } finally {
+                                    hideLoading();
+                                }
+                            }
+                        });
                     });
                 } catch (error) {
                     console.error('Error rendering members:', error);
