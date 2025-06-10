@@ -27,6 +27,65 @@ router.get('/search', async (req, res) => {
     }
 });
 
+// Advanced search with filters
+router.get('/advanced-search', async (req, res) => {
+    try {
+        const filters = {
+            search: req.query.search,
+            category: req.query.category,
+            author: req.query.author,
+            publisher: req.query.publisher,
+            yearFrom: req.query.yearFrom,
+            yearTo: req.query.yearTo,
+            availability: req.query.availability,
+            sortBy: req.query.sortBy || 'title',
+            sortOrder: req.query.sortOrder || 'asc',
+            limit: req.query.limit || 50,
+            offset: req.query.offset || 0
+        };
+
+        const books = await Book.advancedSearch(filters);
+        res.json(books);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get search suggestions
+router.get('/suggestions', async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q || q.length < 2) {
+            return res.json({ titles: [], authors: [], categories: [] });
+        }
+        const suggestions = await Book.getSearchSuggestions(q);
+        res.json(suggestions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get filter options
+router.get('/filter-options', async (req, res) => {
+    try {
+        const [categories, authors, publishers, yearRange] = await Promise.all([
+            Book.getCategories(),
+            Book.getAuthors(),
+            Book.getPublishers(),
+            Book.getPublicationYearRange()
+        ]);
+
+        res.json({
+            categories,
+            authors,
+            publishers,
+            yearRange
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Get a single book
 router.get('/:id', async (req, res) => {
     try {
@@ -63,6 +122,7 @@ router.post('/', async (req, res) => {
         });
 
         res.status(201).json({ id: bookId, message: 'Book created successfully' });
+        console.log("book added to database!");
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

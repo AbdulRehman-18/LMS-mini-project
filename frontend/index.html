@@ -187,6 +187,7 @@
             font-weight: 700;
             background: linear-gradient(to right, #1e293b, #334155);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -349,58 +350,58 @@
 
 <body class="min-h-screen font-sans text-gray-800 bg-gray-50">
     <!-- Sidebar -->
-    <div class="sidebar bg-gradient-to-b from-indigo-900 via-indigo-800 to-indigo-700 min-h-screen w-64 shadow-xl">
-        <div class="p-8 flex flex-col h-full">
+    <div class="sidebar bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 min-h-screen w-64 shadow-2xl">
+        <div class="p-6 flex flex-col h-full">
           <!-- Logo & Title -->
-          <div class="flex items-center mb-10">
-            <div class="bg-white bg-opacity-20 p-4 mr-4 rounded-2xl shadow-lg flex items-center justify-center">
-              <i class="fas fa-book-open text-indigo-100 text-2xl"></i>
+          <div class="flex items-center mb-8">
+            <div class="bg-white bg-opacity-10 backdrop-blur-md p-3 mr-3 rounded-xl shadow-lg flex items-center justify-center">
+              <i class="fas fa-book-open text-indigo-300 text-xl"></i>
             </div>
             <div>
-              <h1 class="text-2xl font-extrabold text-white tracking-wide select-none">Central Library</h1>
-              <p class="text-indigo-300 text-sm mt-1 select-none">Your knowledge hub</p>
+              <h1 class="text-xl font-bold text-white tracking-tight select-none">Central Library</h1>
+              <p class="text-gray-400 text-xs mt-1 select-none">Your Knowledge Hub</p>
             </div>
           </div>
       
           <!-- Navigation -->
-          <nav class="space-y-2 flex-grow">
+          <nav class="space-y-1 flex-grow">
             <button data-section="dashboard"
-              class="nav-item w-full text-left px-5 py-3 rounded-xl font-semibold flex items-center text-white bg-indigo-700 shadow-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-              <i class="fas fa-tachometer-alt mr-4 text-indigo-200 text-lg"></i>Dashboard
+              class="nav-item w-full text-left px-4 py-3 rounded-lg font-medium flex items-center text-white bg-indigo-700 bg-opacity-50 backdrop-blur-sm shadow-md hover:bg-indigo-600 hover:bg-opacity-70 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300">
+              <i class="fas fa-tachometer-alt mr-3 text-indigo-300 text-base"></i>Dashboard
             </button>
       
             <button data-section="books"
-              class="nav-item w-full text-left px-5 py-3 rounded-xl font-semibold flex items-center text-indigo-200 hover:text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-              <i class="fas fa-book mr-4 text-indigo-300 text-lg"></i>Books
+              class="nav-item w-full text-left px-4 py-3 rounded-lg font-medium flex items-center text-gray-200 hover:text-white hover:bg-indigo-600 hover:bg-opacity-50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300">
+              <i class="fas fa-book mr-3 text-indigo-300 text-base"></i>Books
             </button>
       
             <button data-section="members"
-              class="nav-item w-full text-left px-5 py-3 rounded-xl font-semibold flex items-center text-indigo-200 hover:text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-              <i class="fas fa-users mr-4 text-indigo-300 text-lg"></i>Members
+              class="nav-item w-full text-left px-4 py-3 rounded-lg font-medium flex items-center text-gray-200 hover:text-white hover:bg-indigo-600 hover:bg-opacity-50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300">
+              <i class="fas fa-users mr-3 text-indigo-300 text-base"></i>Members
             </button>
       
             <button data-section="loans"
-              class="nav-item w-full text-left px-5 py-3 rounded-xl font-semibold flex items-center text-indigo-200 hover:text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-              <i class="fas fa-handshake mr-4 text-indigo-300 text-lg"></i>Loans
+              class="nav-item w-full text-left px-4 py-3 rounded-lg font-medium flex items-center text-gray-200 hover:text-white hover:bg-indigo-600 hover:bg-opacity-50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300">
+              <i class="fas fa-handshake mr-3 text-indigo-300 text-base"></i>Loans
             </button>
       
             <button data-section="reports"
-              class="nav-item w-full text-left px-5 py-3 rounded-xl font-semibold flex items-center text-indigo-200 hover:text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-              <i class="fas fa-chart-line mr-4 text-indigo-300 text-lg"></i>Reports
+              class="nav-item w-full text-left px-4 py-3 rounded-lg font-medium flex items-center text-gray-200 hover:text-white hover:bg-indigo-600 hover:bg-opacity-50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300">
+              <i class="fas fa-chart-line mr-3 text-indigo-300 text-base"></i>Reports
             </button>
           </nav>
       
           <!-- Profile Section -->
-          <div class="mt-12 pt-6 border-t border-indigo-600">
+          <div class="mt-10 pt-5 border-t border-gray-700">
             <div
-              class="flex items-center space-x-4 p-4 rounded-xl bg-indigo-800 bg-opacity-30 shadow-inner hover:bg-indigo-700 cursor-pointer transition">
+              class="flex items-center space-x-3 p-3 rounded-lg bg-gray-800 bg-opacity-20 backdrop-blur-md shadow-inner hover:bg-indigo-700 hover:bg-opacity-30 cursor-pointer transition-all duration-300">
               <div
-                class="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-400 to-indigo-600 flex items-center justify-center text-white font-bold text-lg select-none">
+                class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-indigo-700 flex items-center justify-center text-white font-semibold text-base select-none">
                 JD
               </div>
               <div>
-                <p class="text-white text-base font-semibold leading-tight select-none">Librarian</p>
-                <p class="text-indigo-300 text-sm select-none">Admin</p>
+                <p class="text-white text-sm font-medium leading-tight select-none">Librarian</p>
+                <p class="text-gray-400 text-xs select-none">Admin</p>
               </div>
             </div>
           </div>
@@ -785,57 +786,56 @@
         </div>
 
         <!-- Books Section -->
-        <div id="books" class="section hidden">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800 mb-2 section-title">Book Management</h1>
-                    <p class="text-gray-600">Manage your library's book collection and inventory</p>
+        <div id="books" class="section hidden px-6 py-10 bg-gradient-to-br from-white to-gray-50 min-h-[90vh]">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+              <div>
+                <h1 class="text-4xl font-semibold text-gray-900 mb-1">📚 Book Management</h1>
+                <p class="text-gray-500 text-sm">Effortlessly manage your library's book inventory and availability</p>
+              </div>
+              <button data-modal="bookModal"
+                class="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95">
+                <i class="fas fa-plus"></i> Add Book
+              </button>
+            </div>
+          
+            <!-- Search and Filter -->
+            <div class="bg-white/60 backdrop-blur-md border border-gray-200 rounded-2xl p-6 shadow-md mb-10">
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-2 relative">
+                  <input type="text" id="bookSearch"
+                    placeholder="Search title, author, ISBN, or category..."
+                    class="w-full pl-12 pr-4 py-3 text-sm rounded-xl bg-white/80 shadow-inner placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition" />
+                  <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
-                <button data-modal="bookModal" class="modern-button mt-4 md:mt-0 flex items-center">
-                    <i class="fas fa-plus mr-3"></i>Add New Book
-                </button>
+                <select id="categoryFilter"
+                  class="w-full text-sm rounded-xl bg-white/80 py-3 px-4 border border-gray-300 text-gray-700 focus:ring-2 focus:ring-black focus:outline-none transition shadow-inner">
+                  <option value="">All Categories</option>
+                  <option value="Fiction">Fiction</option>
+                  <option value="Fantasy">Fantasy</option>
+                  <option value="Science Fiction">Science Fiction</option>
+                  <option value="Mystery">Mystery</option>
+                  <option value="Non-Fiction">Non-Fiction</option>
+                </select>
+                <select id="statusFilter"
+                  class="w-full text-sm rounded-xl bg-white/80 py-3 px-4 border border-gray-300 text-gray-700 focus:ring-2 focus:ring-black focus:outline-none transition shadow-inner">
+                  <option value="">All Statuses</option>
+                  <option value="Available">Available</option>
+                  <option value="Borrowed">Borrowed</option>
+                </select>
+              </div>
             </div>
-
-            <!-- Search and Filter Bar -->
-            <div class="bg-white rounded-xl p-4 mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="md:col-span-2">
-                        <div class="relative">
-                            <input type="text" id="bookSearch"
-                                placeholder="Search books by title, author, ISBN, or category..."
-                                class="modern-input w-full pl-10">
-                            <i
-                                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <select id="categoryFilter" class="modern-input w-full">
-                            <option value="">All Categories</option>
-                            <option value="Fiction">Fiction</option>
-                            <option value="Fantasy">Fantasy</option>
-                            <option value="Science Fiction">Science Fiction</option>
-                            <option value="Mystery">Mystery</option>
-                            <option value="Non-Fiction">Non-Fiction</option>
-                        </select>
-                    </div>
-                    <div>
-                        <select id="statusFilter" class="modern-input w-full">
-                            <option value="">All Statuses</option>
-                            <option value="Available">Available</option>
-                            <option value="Borrowed">Borrowed</option>
-                        </select>
-                    </div>
-                </div>
+          
+            <!-- Book Cards Grid -->
+            <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              <!-- Book cards will be loaded here dynamically -->
             </div>
-
-            <!-- Books Grid -->
-            <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Books will be loaded here -->
-            </div>
-
+          
             <!-- Pagination -->
-            <div id="booksPagination" class="pagination mt-6"></div>
-        </div>
+            <div id="booksPagination" class="flex justify-center mt-12 space-x-2 text-sm text-gray-600"></div>
+          </div>
+          
+          
 
         <!-- Members Section -->
         <div id="members" class="section hidden">
@@ -851,10 +851,21 @@
 
             <!-- Search Bar -->
             <div class="bg-white rounded-xl p-4 mb-6">
-                <div class="relative">
-                    <input type="text" id="memberSearch" placeholder="Search members by name, email, or phone..."
-                        class="modern-input w-full pl-10">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <div class="flex gap-4">
+                    <div class="flex-1 relative">
+                        <input type="text" id="memberSearch" placeholder="Search members by name, email, or phone..."
+                            class="modern-input w-full pl-10">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <!-- Autocomplete dropdown -->
+                        <div id="memberSearchAutocomplete" class="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-lg z-50 hidden max-h-48 overflow-y-auto"></div>
+                    </div>
+                    <button id="memberAdvancedSearchBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center">
+                        <i class="fas fa-search-plus mr-2"></i>
+                        Advanced
+                    </button>
+                    <button id="memberSearchHistoryBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition flex items-center">
+                        <i class="fas fa-history"></i>
+                    </button>
                 </div>
             </div>
 
@@ -1543,7 +1554,7 @@
                         memberSelect.appendChild(option);
                     });
 
-                    books.filter(book => book.borrowed_count > 0).forEach(book => {
+                    books.filter(book => book.copies_available > 0).forEach(book => {
                         const option = document.createElement('option');
                         option.value = book.id;
                         option.textContent = `${book.title} by ${book.author}`;
@@ -1740,6 +1751,187 @@
                 });
             });
         </script>
+
+    <!-- Advanced Search Modal for Books -->
+    <div id="advancedSearchModal" class="modal hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+            <div class="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-medium text-gray-900">Advanced Book Search</h3>
+                    <button class="modal-close text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                        <input type="text" id="advancedTitle" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Book title">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                        <input type="text" id="advancedAuthor" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Author name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
+                        <input type="text" id="advancedISBN" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="ISBN number">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publisher</label>
+                        <input type="text" id="advancedPublisher" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Publisher name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                        <select id="advancedCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="advancedStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Statuses</option>
+                            <option value="Available">Available</option>
+                            <option value="Borrowed">Borrowed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publication Year From</label>
+                        <input type="number" id="advancedYearFrom" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., 2000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publication Year To</label>
+                        <input type="number" id="advancedYearTo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., 2024">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                    <select id="advancedSortBy" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                        <option value="publication_year">Publication Year</option>
+                        <option value="category">Category</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button id="clearAdvancedSearch" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Clear
+                    </button>
+                    <button class="modal-close px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Cancel
+                    </button>
+                    <button id="executeAdvancedSearch" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Search Modal for Members -->
+    <div id="memberAdvancedSearchModal" class="modal hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+            <div class="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-medium text-gray-900">Advanced Member Search</h3>
+                    <button class="modal-close text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" id="advancedMemberName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Member name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="advancedMemberEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Email address">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                        <input type="text" id="advancedMemberPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Phone number">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Membership Type</label>
+                        <select id="advancedMembershipType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Types</option>
+                            <option value="student">Student</option>
+                            <option value="faculty">Faculty</option>
+                            <option value="public">Public</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="advancedMemberStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Statuses</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Joined Date From</label>
+                        <input type="date" id="advancedJoinedFrom" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Joined Date To</label>
+                        <input type="date" id="advancedJoinedTo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button id="clearAdvancedMemberSearch" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Clear
+                    </button>
+                    <button class="modal-close px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Cancel
+                    </button>
+                    <button id="executeAdvancedMemberSearch" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search History Modal -->
+    <div id="searchHistoryModal" class="modal hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+            <div class="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-medium text-gray-900">Search History</h3>
+                    <button class="modal-close text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div id="searchHistoryContent" class="max-h-64 overflow-y-auto">
+                    <!-- Search history items will be populated here -->
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button id="clearSearchHistory" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Clear History
+                    </button>
+                    <button class="modal-close px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

@@ -1217,7 +1217,7 @@ function populateDropdowns() {
     if (bookDropdown) {
         bookDropdown.innerHTML = '<option value="">Select a book...</option>';
         // Only show available books
-        const availableBooks = books.filter(book => book.available);
+        const availableBooks = books.filter(book => book.copies_available > 0);
         availableBooks.forEach(book => {
             bookDropdown.innerHTML += `<option value="${book.id}">${book.title} (${book.author})</option>`;
         });
@@ -1235,11 +1235,14 @@ function populateDropdowns() {
 
 // Search handlers for books and members
 function setupSearchHandlers() {
-    // Book search handling
+    // Book search handling with advanced features
     const bookSearchInput = document.getElementById('bookSearch');
     if (bookSearchInput) {
+        // Add autocomplete functionality
+        setupAutocomplete(bookSearchInput, 'books');
+        
         bookSearchInput.addEventListener('input', debounce(function (e) {
-            const searchTerm = e.target.value.trim().toLowerCase();
+            const searchTerm = e.target.value.trim();
 
             if (searchTerm.length === 0) {
                 // When search is cleared, show all books
@@ -1249,23 +1252,18 @@ function setupSearchHandlers() {
 
             if (searchTerm.length < 2) return; // Wait for more characters
 
-            // Filter books client-side (could be replaced with API call for large datasets)
-            const filteredBooks = books.filter(book =>
-                book.title.toLowerCase().includes(searchTerm) ||
-                book.author.toLowerCase().includes(searchTerm) ||
-                book.isbn.toLowerCase().includes(searchTerm) ||
-                (book.category && book.category.toLowerCase().includes(searchTerm))
-            );
-
-            renderBooksGrid(filteredBooks);
+            // Use advanced search API for better results
+            performBookSearch({ search: searchTerm });
         }, 300));
     }
 
-    // Member search handling
+    // Member search handling with advanced features
     const memberSearchInput = document.getElementById('memberSearch');
     if (memberSearchInput) {
+        setupAutocomplete(memberSearchInput, 'members');
+        
         memberSearchInput.addEventListener('input', debounce(function (e) {
-            const searchTerm = e.target.value.trim().toLowerCase();
+            const searchTerm = e.target.value.trim();
 
             if (searchTerm.length === 0) {
                 // When search is cleared, show all members
@@ -1275,38 +1273,139 @@ function setupSearchHandlers() {
 
             if (searchTerm.length < 2) return; // Wait for more characters
 
-            // Filter members client-side (could be replaced with API call for large datasets)
-            const filteredMembers = members.filter(member =>
-                member.name.toLowerCase().includes(searchTerm) ||
-                (member.email && member.email.toLowerCase().includes(searchTerm)) ||
-                (member.phone && member.phone.toLowerCase().includes(searchTerm))
-            );
-
-            renderMembersTable(filteredMembers);
+            // Use advanced search for members
+            performMemberSearch({ search: searchTerm });
         }, 300));
     }
 
-    // Category filter for books
+    // Advanced Search Button Handlers
+    const advancedSearchBtn = document.getElementById('advancedSearchBtn');
+    if (advancedSearchBtn) {
+        advancedSearchBtn.addEventListener('click', () => {
+            populateAdvancedSearchModal();
+            openModal('advancedSearchModal');
+        });
+    }
+
+    const memberAdvancedSearchBtn = document.getElementById('memberAdvancedSearchBtn');
+    if (memberAdvancedSearchBtn) {
+        memberAdvancedSearchBtn.addEventListener('click', () => {
+            populateMemberAdvancedSearchModal();
+            openModal('memberAdvancedSearchModal');
+        });
+    }
+
+    // Search History Button Handlers
+    const searchHistoryBtn = document.getElementById('searchHistoryBtn');
+    if (searchHistoryBtn) {
+        searchHistoryBtn.addEventListener('click', () => {
+            loadSearchHistory('books');
+            openModal('searchHistoryModal');
+        });
+    }
+
+    const memberSearchHistoryBtn = document.getElementById('memberSearchHistoryBtn');
+    if (memberSearchHistoryBtn) {
+        memberSearchHistoryBtn.addEventListener('click', () => {
+            loadSearchHistory('members');
+            openModal('searchHistoryModal');
+        });
+    }
+
+    // Advanced Search Form Handlers
+    const executeAdvancedSearchBtn = document.getElementById('executeAdvancedSearch');
+    if (executeAdvancedSearchBtn) {
+        executeAdvancedSearchBtn.addEventListener('click', () => {
+            executeAdvancedBookSearch();
+        });
+    }
+
+    const executeMemberAdvancedSearchBtn = document.getElementById('executeAdvancedMemberSearch');
+    if (executeMemberAdvancedSearchBtn) {
+        executeMemberAdvancedSearchBtn.addEventListener('click', () => {
+            executeAdvancedMemberSearch();
+        });
+    }
+
+    // Clear Advanced Search Handlers
+    const clearAdvancedSearchBtn = document.getElementById('clearAdvancedSearch');
+    if (clearAdvancedSearchBtn) {
+        clearAdvancedSearchBtn.addEventListener('click', () => {
+            clearAdvancedSearchForm();
+        });
+    }
+
+    const clearAdvancedMemberSearchBtn = document.getElementById('clearAdvancedMemberSearch');
+    if (clearAdvancedMemberSearchBtn) {
+        clearAdvancedMemberSearchBtn.addEventListener('click', () => {
+            clearAdvancedMemberSearchForm();
+        });
+    }
+
+    // Clear Search History Handlers
+    const clearSearchHistoryBtn = document.getElementById('clearSearchHistory');
+    if (clearSearchHistoryBtn) {
+        clearSearchHistoryBtn.addEventListener('click', () => {
+            clearSearchHistory();
+        });
+    }
+
+    // Category and Status filters for books
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', () => {
+            performBookSearch({
+                category: categoryFilter.value,
+                search: bookSearchInput ? bookSearchInput.value : ''
+            });
+        });
+    }
+
+    const statusFilter = document.getElementById('statusFilter');
+    if (statusFilter) {
+        statusFilter.addEventListener('change', () => {
+            performBookSearch({
+                status: statusFilter.value,
+                search: bookSearchInput ? bookSearchInput.value : ''
+            });
+        });
+    }
+
+    // Member dashboard search handlers
+    setupMemberDashboardSearch();
+}
     const categoryFilter = document.getElementById('categoryFilter');
     if (categoryFilter) {
         categoryFilter.addEventListener('change', function () {
             const category = this.value;
-
-            if (!category) {
-                // When filter is cleared, show all books
-                renderBooksGrid(books);
-                return;
-            }
-
-            // Filter books by category
-            const filteredBooks = books.filter(book =>
-                book.category === category
-            );
-
-            renderBooksGrid(filteredBooks);
+            const searchTerm = document.getElementById('bookSearch')?.value || '';
+            
+            performAdvancedBookSearch({ 
+                search: searchTerm,
+                category: category 
+            });
         });
     }
-}
+
+    // Status filter for books
+    const statusFilter = document.getElementById('statusFilter');
+    if (statusFilter) {
+        statusFilter.addEventListener('change', function () {
+            const availability = this.value;
+            const searchTerm = document.getElementById('bookSearch')?.value || '';
+            const category = document.getElementById('categoryFilter')?.value || '';
+            
+            performAdvancedBookSearch({ 
+                search: searchTerm,
+                category: category,
+                availability: availability 
+            });
+        });
+    }
+
+    // Setup advanced search modal triggers
+    setupAdvancedSearchModals();
+
 
 // Debounce utility function to limit function calls
 function debounce(func, wait) {
@@ -1478,5 +1577,199 @@ function showSection(sectionId) {
         } else if (sectionId === 'loans') {
             renderLoansTable(loans);
         }
+    }
+}
+
+// Advanced Search Functions
+async function performBookSearch(searchParams) {
+    try {
+        const queryParams = new URLSearchParams();
+        
+        if (searchParams.search) queryParams.append('search', searchParams.search);
+        if (searchParams.category) queryParams.append('category', searchParams.category);
+        if (searchParams.status) queryParams.append('status', searchParams.status);
+        if (searchParams.author) queryParams.append('author', searchParams.author);
+        if (searchParams.title) queryParams.append('title', searchParams.title);
+        if (searchParams.isbn) queryParams.append('isbn', searchParams.isbn);
+        if (searchParams.publisher) queryParams.append('publisher', searchParams.publisher);
+        if (searchParams.yearFrom) queryParams.append('yearFrom', searchParams.yearFrom);
+        if (searchParams.yearTo) queryParams.append('yearTo', searchParams.yearTo);
+        if (searchParams.sortBy) queryParams.append('sortBy', searchParams.sortBy);
+
+        const response = await apiRequest(`/search/books/advanced?${queryParams.toString()}`);
+        if (response.success) {
+            renderBooksGrid(response.data.books);
+            
+            // Save search to history if it's a user-initiated search
+            if (searchParams.search || searchParams.title || searchParams.author) {
+                saveSearchToHistory(searchParams.search || `${searchParams.title || ''} ${searchParams.author || ''}`.trim(), 'books');
+            }
+        }
+    } catch (error) {
+        console.error('Book search failed:', error);
+        showNotification('error', 'Search failed. Please try again.');
+    }
+}
+
+async function performMemberSearch(searchParams) {
+    try {
+        const queryParams = new URLSearchParams();
+        
+        if (searchParams.search) queryParams.append('search', searchParams.search);
+        if (searchParams.name) queryParams.append('name', searchParams.name);
+        if (searchParams.email) queryParams.append('email', searchParams.email);
+        if (searchParams.phone) queryParams.append('phone', searchParams.phone);
+        if (searchParams.membershipType) queryParams.append('membershipType', searchParams.membershipType);
+        if (searchParams.status) queryParams.append('status', searchParams.status);
+        if (searchParams.joinedFrom) queryParams.append('joinedFrom', searchParams.joinedFrom);
+        if (searchParams.joinedTo) queryParams.append('joinedTo', searchParams.joinedTo);
+
+        const response = await apiRequest(`/search/members/advanced?${queryParams.toString()}`);
+        if (response.success) {
+            renderMembersTable(response.data.members);
+            
+            // Save search to history
+            if (searchParams.search || searchParams.name || searchParams.email) {
+                saveSearchToHistory(searchParams.search || `${searchParams.name || ''} ${searchParams.email || ''}`.trim(), 'members');
+            }
+        }
+    } catch (error) {
+        console.error('Member search failed:', error);
+        showNotification('error', 'Search failed. Please try again.');
+    }
+}
+
+// Advanced Search Modal Functions
+async function populateAdvancedSearchModal() {
+    try {
+        // Load categories for the dropdown
+        const response = await apiRequest('/books/filters');
+        if (response.success) {
+            const categorySelect = document.getElementById('advancedCategory');
+            if (categorySelect) {
+                categorySelect.innerHTML = '<option value="">All Categories</option>';
+                response.data.categories.forEach(category => {
+                    categorySelect.innerHTML += `<option value="${category}">${category}</option>`;
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load search filters:', error);
+    }
+}
+
+async function populateMemberAdvancedSearchModal() {
+    // Member advanced search modal is already pre-populated with static options
+    // Can be enhanced to load dynamic data if needed
+}
+
+function executeAdvancedBookSearch() {
+    const searchParams = {
+        title: document.getElementById('advancedTitle')?.value,
+        author: document.getElementById('advancedAuthor')?.value,
+        isbn: document.getElementById('advancedISBN')?.value,
+        publisher: document.getElementById('advancedPublisher')?.value,
+        category: document.getElementById('advancedCategory')?.value,
+        status: document.getElementById('advancedStatus')?.value,
+        yearFrom: document.getElementById('advancedYearFrom')?.value,
+        yearTo: document.getElementById('advancedYearTo')?.value,
+        sortBy: document.getElementById('advancedSortBy')?.value
+    };
+
+    // Remove empty values
+    Object.keys(searchParams).forEach(key => {
+        if (!searchParams[key]) delete searchParams[key];
+    });
+
+    performBookSearch(searchParams);
+    closeModal('advancedSearchModal');
+}
+
+function executeAdvancedMemberSearch() {
+    const searchParams = {
+        name: document.getElementById('advancedMemberName')?.value,
+        email: document.getElementById('advancedMemberEmail')?.value,
+        phone: document.getElementById('advancedMemberPhone')?.value,
+        membershipType: document.getElementById('advancedMembershipType')?.value,
+        status: document.getElementById('advancedMemberStatus')?.value,
+        joinedFrom: document.getElementById('advancedJoinedFrom')?.value,
+        joinedTo: document.getElementById('advancedJoinedTo')?.value
+    };
+
+    // Remove empty values
+    Object.keys(searchParams).forEach(key => {
+        if (!searchParams[key]) delete searchParams[key];
+    });
+
+    performMemberSearch(searchParams);
+    closeModal('memberAdvancedSearchModal');
+}
+
+function clearAdvancedSearchForm() {
+    document.getElementById('advancedTitle').value = '';
+    document.getElementById('advancedAuthor').value = '';
+    document.getElementById('advancedISBN').value = '';
+    document.getElementById('advancedPublisher').value = '';
+    document.getElementById('advancedCategory').value = '';
+    document.getElementById('advancedStatus').value = '';
+    document.getElementById('advancedYearFrom').value = '';
+    document.getElementById('advancedYearTo').value = '';
+    document.getElementById('advancedSortBy').value = 'title';
+}
+
+function clearAdvancedMemberSearchForm() {
+    document.getElementById('advancedMemberName').value = '';
+    document.getElementById('advancedMemberEmail').value = '';
+    document.getElementById('advancedMemberPhone').value = '';
+    document.getElementById('advancedMembershipType').value = '';
+    document.getElementById('advancedMemberStatus').value = '';
+    document.getElementById('advancedJoinedFrom').value = '';
+    document.getElementById('advancedJoinedTo').value = '';
+}
+
+// Search History Functions
+async function loadSearchHistory(type) {
+    try {
+        const response = await apiRequest(`/search/history?type=${type}&limit=20`);
+        if (response.success) {
+            renderSearchHistory(response.data.history);
+        }
+    } catch (error) {
+        console.error('Failed to load search history:', error);
+        // Load from localStorage as fallback
+        const localHistory = getLocalSearchHistory(type);
+        renderSearchHistory(localHistory);
+    }
+}
+
+function renderSearchHistory(history) {
+    const historyContent = document.getElementById('searchHistoryContent');
+    if (!historyContent) return;
+
+    if (!history || history.length === 0) {
+        historyContent.innerHTML = '<p class="text-gray-500 text-center py-4">No search history found</p>';
+        return;
+    }
+
+    historyContent.innerHTML = history.map(item => `
+        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer border-b border-gray-100 last:border-b-0" 
+             onclick="repeatSearch('${item.search_query || item.query}', '${item.search_type || item.type}')">
+            <div class="flex items-center">
+                <i class="fas fa-history text-gray-400 mr-3"></i>
+                <div>
+                    <span class="text-sm font-medium">${item.search_query || item.query}</span>
+                    <p class="text-xs text-gray-500">${item.search_type || item.type} search</p>
+                </div>
+            </div>
+            <span class="text-xs text-gray-400">${formatSearchDate(item.created_at || item.timestamp)}</span>
+        </div>
+    `).join('');
+}
+
+function repeatSearch(query, type) {
+    const searchInput = type === 'books' ? document.getElementById('bookSearch') : document.getElementById('memberSearch');
+    if (searchInput) {
+        searchInput.value = query;
+        searchInput.dispatchEvent(new Event('input'));
     }
 }

@@ -17,6 +17,9 @@ const bookRoutes = require('./routes/books');
 const memberRoutes = require('./routes/members');
 const loanRoutes = require('./routes/loans');
 const statsRoutes = require('./routes/stats');
+const authRoutes = require('./routes/auth');
+const searchRoutes = require('./routes/search');
+// const memberDataRoutes = require('./routes/member');
 
 const app = express();
 const PORT = process.env.PORT || 5001; // Use port 5001 to avoid conflicts
@@ -130,6 +133,9 @@ app.use('/api/books', bookRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/loans', loanRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/search', searchRoutes);
+// app.use('/api/member', memberDataRoutes);
 
 // API documentation
 app.get('/api/docs', (req, res) => {
@@ -313,7 +319,7 @@ const startServer = async () => {
       console.log('🎉 AbdulRehman Library Management System Started!');
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log(`🚀 Server: http://localhost:${PORT}`);
-      console.log(`🏥 Frontend: http://localhost:${PORT}`);
+      console.log(`🏥 Frontend: http://localhost:${PORT}/login.html`);
       console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🔒 Security: ${isDev ? 'Development' : 'Production'} mode`);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');

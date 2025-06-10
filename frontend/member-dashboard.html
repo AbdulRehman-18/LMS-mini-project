@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard - Library Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#6366f1',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="h-8 w-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book text-white text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h1 class="text-xl font-semibold text-gray-900">Library Dashboard</h1>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-600">
+                        Welcome, <span id="memberName" class="font-medium text-gray-900">Member</span>
+                    </div>
+                    <button id="logoutBtn" class="bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 transition duration-200">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 text-white mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Welcome back, <span id="welcomeName">Member</span>!</h2>
+                    <p class="text-blue-100">Manage your library account and explore our book collection</p>
+                </div>
+                <div class="text-6xl opacity-20">
+                    <i class="fas fa-book-reader"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div class="flex items-center">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-book text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Books Borrowed</p>
+                        <p id="borrowedCount" class="text-2xl font-bold text-gray-900">3</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-100 rounded-lg">
+                        <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Due Soon</p>
+                        <p id="dueSoonCount" class="text-2xl font-bold text-gray-900">1</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-100 rounded-lg">
+                        <i class="fas fa-calendar-check text-green-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Member Since</p>
+                        <p id="memberSince" class="text-2xl font-bold text-gray-900">2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Borrowed Books -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <i class="fas fa-bookmark mr-3 text-primary"></i>
+                        My Borrowed Books
+                    </h3>
+                </div>
+                <div class="p-6">
+                    <div id="borrowedBooks" class="space-y-4">
+                        <!-- Sample borrowed books -->
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-16 bg-primary rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-book text-white"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium text-gray-900">The Great Gatsby</h4>
+                                    <p class="text-sm text-gray-600">F. Scott Fitzgerald</p>
+                                    <p class="text-xs text-yellow-600 mt-1">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        Due: Dec 15, 2024
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Due Soon
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-16 bg-secondary rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-book text-white"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium text-gray-900">To Kill a Mockingbird</h4>
+                                    <p class="text-sm text-gray-600">Harper Lee</p>
+                                    <p class="text-xs text-green-600 mt-1">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        Due: Dec 22, 2024
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-16 bg-purple-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-book text-white"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium text-gray-900">1984</h4>
+                                    <p class="text-sm text-gray-600">George Orwell</p>
+                                    <p class="text-xs text-green-600 mt-1">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        Due: Dec 28, 2024
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-gray-500">You can borrow up to 5 books at a time</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                            <div class="bg-primary h-2 rounded-full" style="width: 60%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">3 of 5 books borrowed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Books Section -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <i class="fas fa-search mr-3 text-primary"></i>
+                        Browse Available Books
+                    </h3>
+                </div>
+                <div class="p-6">                    <!-- Search Bar -->
+                    <div class="mb-6">
+                        <div class="flex gap-3">
+                            <div class="flex-1 relative">
+                                <input type="text" id="bookSearch" placeholder="Search for books..."
+                                    class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <!-- Autocomplete dropdown -->
+                                <div id="bookSearchAutocomplete" class="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-lg z-50 hidden max-h-48 overflow-y-auto"></div>
+                            </div>
+                            <button id="memberAdvancedSearchBtn" class="bg-primary text-white px-4 py-3 rounded-lg hover:bg-primary-dark transition flex items-center">
+                                <i class="fas fa-search-plus mr-2"></i>
+                                Advanced
+                            </button>
+                            <button id="memberSearchHistoryBtn" class="bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition flex items-center">
+                                <i class="fas fa-history"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Quick Filters -->
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <select id="categoryFilter" class="px-3 py-1 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="">All Categories</option>
+                            </select>
+                            <select id="availabilityFilter" class="px-3 py-1 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="">All Books</option>
+                                <option value="available">Available Only</option>
+                            </select>
+                            <select id="sortBy" class="px-3 py-1 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="title">Sort by Title</option>
+                                <option value="author">Sort by Author</option>
+                                <option value="publication_year">Sort by Year</option>
+                                <option value="category">Sort by Category</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Featured Books -->
+                    <div class="space-y-4">
+                        <h4 class="font-medium text-gray-900 mb-3">Featured Books</h4>
+                        
+                        <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                            <div class="flex items-center">
+                                <div class="w-10 h-14 bg-blue-600 rounded flex items-center justify-center">
+                                    <i class="fas fa-book text-white text-sm"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h5 class="font-medium text-gray-900 text-sm">Pride and Prejudice</h5>
+                                    <p class="text-xs text-gray-600">Jane Austen</p>
+                                    <p class="text-xs text-green-600 mt-1">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Available
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="bg-primary text-white px-3 py-1 rounded text-xs hover:bg-primary-dark transition duration-200">
+                                Request
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                            <div class="flex items-center">
+                                <div class="w-10 h-14 bg-green-600 rounded flex items-center justify-center">
+                                    <i class="fas fa-book text-white text-sm"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h5 class="font-medium text-gray-900 text-sm">The Catcher in the Rye</h5>
+                                    <p class="text-xs text-gray-600">J.D. Salinger</p>
+                                    <p class="text-xs text-green-600 mt-1">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Available
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="bg-primary text-white px-3 py-1 rounded text-xs hover:bg-primary-dark transition duration-200">
+                                Request
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-purple-50 rounded-lg border border-purple-200">
+                            <div class="flex items-center">
+                                <div class="w-10 h-14 bg-purple-600 rounded flex items-center justify-center">
+                                    <i class="fas fa-book text-white text-sm"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h5 class="font-medium text-gray-900 text-sm">Lord of the Flies</h5>
+                                    <p class="text-xs text-gray-600">William Golding</p>
+                                    <p class="text-xs text-green-600 mt-1">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Available
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="bg-primary text-white px-3 py-1 rounded text-xs hover:bg-primary-dark transition duration-200">
+                                Request
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <button id="viewAllBooksBtn" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg hover:from-primary-dark hover:to-secondary-dark transition duration-200 font-medium">
+                            <i class="fas fa-books mr-2"></i>
+                            View All Available Books
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Information -->
+        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-user mr-3 text-primary"></i>
+                    Account Information
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <p id="accountName" class="text-gray-900 bg-gray-50 px-4 py-2 rounded-lg">Member Name</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <p id="accountEmail" class="text-gray-900 bg-gray-50 px-4 py-2 rounded-lg">member@example.com</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <p id="accountPhone" class="text-gray-900 bg-gray-50 px-4 py-2 rounded-lg">Not provided</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Membership Type</label>
+                        <p id="accountMembershipType" class="text-gray-900 bg-gray-50 px-4 py-2 rounded-lg">Standard</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Books Modal -->
+    <div id="allBooksModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold text-gray-900">Available Books</h3>
+                    <button id="closeAllBooksModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="mb-6">
+                    <input type="text" id="allBooksSearch" placeholder="Search all books..."
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div id="allBooksList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Books will be loaded here -->
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-spinner fa-spin text-2xl mb-4"></i>
+                        <p>Loading books...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5001/api';
+        let userData = null;
+
+        // DOM Elements
+        const logoutBtn = document.getElementById('logoutBtn');
+        const viewAllBooksBtn = document.getElementById('viewAllBooksBtn');
+        const allBooksModal = document.getElementById('allBooksModal');
+        const closeAllBooksModal = document.getElementById('closeAllBooksModal');        // Initialize Dashboard
+        async function initDashboard() {
+            // Get user data from localStorage
+            const userDataStr = localStorage.getItem('userData');
+            if (!userDataStr) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            userData = JSON.parse(userDataStr);
+            
+            // Update UI with user data
+            document.getElementById('memberName').textContent = userData.name;
+            document.getElementById('welcomeName').textContent = userData.name;
+            document.getElementById('accountName').textContent = userData.name;
+            document.getElementById('accountEmail').textContent = userData.email;
+            document.getElementById('accountPhone').textContent = userData.phone || 'Not provided';
+            document.getElementById('accountMembershipType').textContent = userData.membership_type || userData.membershipType || 'Standard';
+            
+            // Format membership date
+            if (userData.membership_date) {
+                const date = new Date(userData.membership_date);
+                document.getElementById('memberSince').textContent = date.getFullYear();
+            }
+
+            // Load member data
+            await loadMemberProfile();
+            await loadBorrowedBooks();
+            await updateStats();
+        }        // Load member profile data
+        async function loadMemberProfile() {
+            try {
+                // For now, we'll use the userData from localStorage
+                // In the future, this would call `/api/member/profile/${userData.id}`
+                console.log('Profile data loaded from localStorage');
+            } catch (error) {
+                console.error('Error loading member profile:', error);
+            }
+        }
+
+        // Load borrowed books
+        async function loadBorrowedBooks() {
+            try {
+                // For now, show a demo message since the member routes aren't set up yet
+                const borrowedBooksList = document.getElementById('borrowedBooksList');
+                borrowedBooksList.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-book-open text-4xl text-primary mb-4"></i>
+                        <p class="text-gray-700 mb-2">Welcome to the Library System!</p>
+                        <p class="text-gray-500 mb-4">Your borrowed books will appear here</p>
+                        <button id="browseBooks" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition duration-200">
+                            Browse Available Books
+                        </button>
+                    </div>
+                `;
+                
+                // Add event listener for browse books button
+                document.getElementById('browseBooks').addEventListener('click', () => {
+                    allBooksModal.classList.remove('hidden');
+                    loadAllBooks();
+                });
+            } catch (error) {
+                console.error('Error loading borrowed books:', error);
+                document.getElementById('borrowedBooksList').innerHTML = '<div class="text-center py-8 text-red-500">Error loading borrowed books</div>';
+            }
+        }
+
+        // Update statistics
+        async function updateStats() {
+            try {
+                // Set default stats for now
+                document.getElementById('borrowedCount').textContent = '0';
+                document.getElementById('dueSoonCount').textContent = '0';
+            } catch (error) {
+                console.error('Error updating stats:', error);
+            }
+        }
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('userType');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // View All Books Modal
+        viewAllBooksBtn.addEventListener('click', () => {
+            allBooksModal.classList.remove('hidden');
+            loadAllBooks();
+        });
+
+        closeAllBooksModal.addEventListener('click', () => {
+            allBooksModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        allBooksModal.addEventListener('click', (e) => {
+            if (e.target === allBooksModal) {
+                allBooksModal.classList.add('hidden');
+            }
+        });        // Load all books
+        async function loadAllBooks() {
+            try {
+                const searchTerm = document.getElementById('allBooksSearch').value;
+                // Use the existing books API for now
+                const response = await fetch(`${API_BASE_URL}/books`);
+                let books = await response.json();
+                
+                // Filter by search term if provided
+                if (searchTerm) {
+                    books = books.filter(book => 
+                        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        book.category.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+                }
+                
+                const allBooksList = document.getElementById('allBooksList');
+                
+                if (!books || books.length === 0) {
+                    allBooksList.innerHTML = '<div class="col-span-2 text-center py-8 text-gray-500">No books available</div>';
+                    return;
+                }
+                
+                allBooksList.innerHTML = books.slice(0, 20).map(book => `
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start">
+                                <div class="w-12 h-16 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-book text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900 mb-1">${book.title}</h4>
+                                    <p class="text-sm text-gray-600 mb-2">${book.author}</p>
+                                    <p class="text-xs text-gray-500 mb-2">${book.category} • ${book.publication_year || 'N/A'}</p>
+                                    <p class="text-xs ${book.available_copies > 0 ? 'text-green-600' : 'text-red-600'}">
+                                        <i class="fas ${book.available_copies > 0 ? 'fa-check-circle' : 'fa-times-circle'} mr-1"></i>
+                                        ${book.available_copies > 0 ? `${book.available_copies} available` : 'Not available'}
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="bg-primary text-white px-3 py-1 rounded text-xs hover:bg-primary-dark transition duration-200 ${book.available_copies > 0 ? '' : 'opacity-50 cursor-not-allowed'}"
+                                ${book.available_copies > 0 ? '' : 'disabled'}>
+                                Request
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading books:', error);
+                document.getElementById('allBooksList').innerHTML = '<div class="col-span-2 text-center py-8 text-red-500">Error loading books</div>';
+            }
+        }// Search functionality for all books
+        document.getElementById('allBooksSearch').addEventListener('input', (e) => {
+            // Debounce the search to avoid too many API calls
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(() => {
+                loadAllBooks();
+            }, 300);
+        });        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+
+    <!-- Advanced Search Modal for Books -->
+    <div id="memberAdvancedSearchModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+            <div class="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-medium text-gray-900">Advanced Book Search</h3>
+                    <button id="closeMemberAdvancedSearch" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                        <input type="text" id="memberAdvancedTitle" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Book title">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                        <input type="text" id="memberAdvancedAuthor" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Author name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
+                        <input type="text" id="memberAdvancedISBN" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="ISBN number">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                        <select id="memberAdvancedCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publication Year From</label>
+                        <input type="number" id="memberAdvancedYearFrom" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="e.g., 2000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Publication Year To</label>
+                        <input type="number" id="memberAdvancedYearTo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="e.g., 2024">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                    <select id="memberAdvancedSortBy" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                        <option value="publication_year">Publication Year</option>
+                        <option value="category">Category</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center mb-6">
+                    <input type="checkbox" id="memberAvailableOnly" class="rounded border-gray-300 text-primary focus:ring-primary">
+                    <label for="memberAvailableOnly" class="ml-2 text-sm text-gray-700">Show available books only</label>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button id="clearMemberAdvancedSearch" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Clear
+                    </button>
+                    <button id="closeMemberAdvancedSearchCancel" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Cancel
+                    </button>
+                    <button id="executeMemberAdvancedSearch" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search History Modal -->
+    <div id="memberSearchHistoryModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+            <div class="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-medium text-gray-900">Search History</h3>
+                    <button id="closeMemberSearchHistory" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div id="memberSearchHistoryContent" class="max-h-64 overflow-y-auto">
+                    <!-- Search history items will be populated here -->
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button id="clearMemberSearchHistory" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
+                        Clear History
+                    </button>
+                    <button id="closeMemberSearchHistoryClose" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

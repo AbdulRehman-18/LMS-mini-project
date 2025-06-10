@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#6366f1',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <!-- Login Container -->
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <div class="mx-auto h-16 w-16 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-book text-white text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900">Welcome Back</h2>
+                <p class="mt-2 text-sm text-gray-600">Sign in to your library account</p>
+            </div>
+
+            <!-- Login Form -->
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <div class="relative">
+                            <input type="email" id="email" name="email" required
+                                class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200"
+                                placeholder="Enter your email">
+                            <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" required
+                                class="w-full px-4 py-3 pl-12 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200"
+                                placeholder="Enter your password">
+                            <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <button type="button" id="togglePassword" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember" name="remember" type="checkbox"
+                                class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                            <label for="remember" class="ml-2 block text-sm text-gray-900">Remember me</label>
+                        </div>
+                        <div class="text-sm">
+                            <a href="#" class="font-medium text-primary hover:text-secondary">Forgot password?</a>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="loginBtn"
+                        class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 px-4 rounded-xl hover:from-primary-dark hover:to-secondary-dark transition duration-200 font-medium">
+                        <span id="loginBtnText">Sign In</span>
+                        <i id="loginSpinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
+                    </button>
+
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Don't have an account? 
+                            <button type="button" id="showRegisterBtn" class="font-medium text-primary hover:text-secondary">Register here</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Error/Success Messages -->
+            <div id="messageContainer" class="hidden">
+                <div id="messageContent" class="p-4 rounded-lg text-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">Create Account</h3>
+                    <button id="closeRegisterModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <form id="registerForm" class="space-y-4">
+                    <div>
+                        <label for="regName" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="regName" name="name" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Enter your full name">
+                    </div>
+
+                    <div>
+                        <label for="regEmail" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="regEmail" name="email" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Enter your email">
+                    </div>
+
+                    <div>
+                        <label for="regPhone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="regPhone" name="phone"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Enter your phone number">
+                    </div>
+
+                    <div>
+                        <label for="regAddress" class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <textarea id="regAddress" name="address" rows="3"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Enter your address"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="regMembershipType" class="block text-sm font-medium text-gray-700 mb-2">Membership Type</label>
+                        <select id="regMembershipType" name="membershipType"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="Standard">Standard</option>
+                            <option value="Premium">Premium</option>
+                            <option value="Scholar">Scholar</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="registerBtn"
+                        class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-4 rounded-xl hover:from-green-600 hover:to-green-700 transition duration-200 font-medium">
+                        <span id="registerBtnText">Create Account</span>
+                        <i id="registerSpinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5001/api';
+
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const registerModal = document.getElementById('registerModal');
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const closeRegisterModal = document.getElementById('closeRegisterModal');
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const messageContainer = document.getElementById('messageContainer');
+        const messageContent = document.getElementById('messageContent');
+
+        // Show/Hide Password
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.querySelector('i').classList.toggle('fa-eye');
+            togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        // Show Register Modal
+        showRegisterBtn.addEventListener('click', () => {
+            registerModal.classList.remove('hidden');
+        });
+
+        // Close Register Modal
+        closeRegisterModal.addEventListener('click', () => {
+            registerModal.classList.add('hidden');
+            registerForm.reset();
+        });
+
+        // Close modal when clicking outside
+        registerModal.addEventListener('click', (e) => {
+            if (e.target === registerModal) {
+                registerModal.classList.add('hidden');
+                registerForm.reset();
+            }
+        });
+
+        // Show Message
+        function showMessage(message, type = 'error') {
+            messageContent.textContent = message;
+            messageContent.className = `p-4 rounded-lg text-center ${
+                type === 'success' 
+                    ? 'bg-green-100 text-green-800 border border-green-200' 
+                    : 'bg-red-100 text-red-800 border border-red-200'
+            }`;
+            messageContainer.classList.remove('hidden');
+            
+            setTimeout(() => {
+                messageContainer.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Login Form Submit
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtnText.textContent = 'Signing In...';
+            loginSpinner.classList.remove('hidden');
+            
+            try {
+                const formData = new FormData(loginForm);
+                const email = formData.get('email');
+                const password = formData.get('password');
+                
+                // Check if admin login
+                if (email === 'abdulrehman@gmail.com' && password === 'abdulrehman') {
+                    showMessage('Admin login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                    return;
+                }
+                
+                // Check member login
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store user data
+                    localStorage.setItem('userData', JSON.stringify(data.user));
+                    localStorage.setItem('userType', 'member');
+                    
+                    showMessage('Login successful! Redirecting to dashboard...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'member-dashboard.html';
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Login failed. Please check your credentials.');
+                }
+            } catch (error) {
+                showMessage('Network error. Please try again.');
+                console.error('Login error:', error);
+            } finally {
+                // Reset loading state
+                loginBtn.disabled = false;
+                loginBtnText.textContent = 'Sign In';
+                loginSpinner.classList.add('hidden');
+            }
+        });
+
+        // Register Form Submit
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const registerBtn = document.getElementById('registerBtn');
+            const registerBtnText = document.getElementById('registerBtnText');
+            const registerSpinner = document.getElementById('registerSpinner');
+            
+            // Show loading state
+            registerBtn.disabled = true;
+            registerBtnText.textContent = 'Creating Account...';
+            registerSpinner.classList.remove('hidden');
+            
+            try {
+                const formData = new FormData(registerForm);
+                const memberData = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    address: formData.get('address'),
+                    membershipType: formData.get('membershipType'),
+                    password: 'password123' // Default password
+                };
+                
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(memberData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage('Account created successfully! You can now login with password: password123', 'success');
+                    registerModal.classList.add('hidden');
+                    registerForm.reset();
+                } else {
+                    showMessage(data.message || 'Registration failed. Please try again.');
+                }
+            } catch (error) {
+                showMessage('Network error. Please try again.');
+                console.error('Registration error:', error);
+            } finally {
+                // Reset loading state
+                registerBtn.disabled = false;
+                registerBtnText.textContent = 'Create Account';
+                registerSpinner.classList.add('hidden');
+            }
+        });
+
+        // Check if user is already logged in
+        if (localStorage.getItem('userData')) {
+            const userType = localStorage.getItem('userType');
+            if (userType === 'admin') {
+                window.location.href = 'index.html';
+            } else {
+                window.location.href = 'member-dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -67,6 +67,7 @@ router.post('/', async (req, res) => {
         });
 
         res.status(201).json({ id: memberId, message: 'Member created successfully' });
+        console.log("member added to database!");
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
