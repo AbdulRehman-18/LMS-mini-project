@@ -1369,7 +1369,7 @@
                                 <p class="text-gray-600 text-sm">${book.author}</p>
                                 <div class="flex flex-wrap gap-2 mt-2 mb-3">
                                     <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">${book.category}</span>
-                                    <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">${book.publicationYear}</span>
+                                    <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">${book.publication_year}</span>
                                     <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">ISBN: ${book.isbn}</span>
                                 </div>
                                 <div class="flex justify-between items-center">
@@ -1510,8 +1510,8 @@
                         row.className = `fade-in animate-delay-${(index % 2) * 100}`;
                         row.innerHTML = `
                             <td class="font-semibold text-gray-700">${loan.id}</td>
-                            <td class="font-medium">Book ID: ${loan.book_id}</td>
-                            <td class="text-gray-600">Member ID: ${loan.member_id}</td>
+                            <td class="font-medium">${loan.book_title}</td>
+                            <td class="text-gray-600">${loan.member_name}</td>
                             <td class="text-gray-600">${new Date(loan.borrow_date).toLocaleDateString()}</td>
                             <td class="text-gray-600">${new Date(loan.due_date).toLocaleDateString()}</td>
                             <td>
